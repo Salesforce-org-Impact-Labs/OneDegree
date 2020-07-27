@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>External_ID__c</fullName>
+    <caseSensitive>false</caseSensitive>
+    <description>This Id will be used for reference in refrec__Service__c for all DML operations in apex.</description>
+    <externalId>true</externalId>
+    <inlineHelpText>This Id will be used for reference in refrec__Service__c for all DML operations in apex.</inlineHelpText>
+    <label>External ID</label>
+    <length>255</length>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Text</type>
+    <unique>true</unique>
+</CustomField>
