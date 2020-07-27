@@ -22,6 +22,10 @@
                 <behavior>Edit</behavior>
                 <field>Last_Run_Datetime__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Active__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

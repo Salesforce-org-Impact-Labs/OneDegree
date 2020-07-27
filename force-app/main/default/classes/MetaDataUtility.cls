@@ -34,6 +34,7 @@ public class MetaDataUtility {
                 Schema.DisplayType valueType = sObjectFields.get(fieldName).getDescribe().getType();
                 if (value instanceof String && valueType != Schema.DisplayType.String)
                 {
+                    /*
                     String svalue = (String)value;
                     if (valueType == Schema.DisplayType.Date)
                         customField.value = Date.valueOf(svalue);
@@ -69,6 +70,7 @@ public class MetaDataUtility {
                         customField.value = Blob.valueOf(svalue);
                     else
                         customField.value = svalue;
+					*/
                 }
                 else
                     customField.value = value;
@@ -84,8 +86,15 @@ public class MetaDataUtility {
     
         // Enqueue custom metadata deployment
         // jobId is the deployment ID
-        Id jobId = Metadata.Operations.enqueueDeployment(mdContainer, callback);
-        return jobId;
+        string jobId;
+        if(!Test.isRunningTest()) {
+        	jobId = Metadata.Operations.enqueueDeployment(mdContainer, callback);
+        } else {
+            // will return some value
+            // when tests are run
+            jobId = 'abc123456789xyz';
+        }
+		return jobId; 
     }
     
     //use it to pass single metadata instance
