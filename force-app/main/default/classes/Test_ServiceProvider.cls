@@ -72,6 +72,9 @@ public class Test_ServiceProvider {
         // check for OneDegree
         ServiceProvider spOneDegree = spFactory.getServiceProvider('OneDegree');
         System.assertEquals('OneDegree', spOneDegree.getServiceProviderName(), 'Service name should be One Degree');        
+        
+        ServiceProvider spGeoCoding = spFactory.getServiceProvider('GeoCoding');
+        System.assertEquals('GeoCoding', spGeoCoding.getServiceProviderName(), 'Service name should be Geo Coding');                
         //service that do not exist
         ServiceProvider spfooService = spFactory.getServiceProvider('fooService');
         System.assertEquals(null, spFactory.getServiceProvider('fooService'), 'Service should not exist.');

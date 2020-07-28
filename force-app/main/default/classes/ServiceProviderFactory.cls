@@ -6,6 +6,8 @@ public class ServiceProviderFactory extends ServiceProviderAbstractFactory{
         }
         if(svc_name.equalsIgnoreCase('OneDegree')) {
             return new OneDegreeServiceProvider();
+        }else if(svc_name.equalsIgnoreCase('GeoCoding')) {
+            return new GeoCodingServiceProvider();
         }
         return null;        
     }

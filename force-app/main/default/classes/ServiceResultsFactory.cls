@@ -10,6 +10,8 @@ public class ServiceResultsFactory extends ServiceProviderAbstractFactory {
         }
         if(query.equalsIgnoreCase('OneDegreeResults')) {
             return new OneDegreeServiceProviderResults();
+        }else if(query.equalsIgnoreCase('GeoCodingResults')) {
+            return new GeoCodingServiceProviderResults();
         }
         return null;
     }    
