@@ -3,6 +3,14 @@ public class OneDegreeHelper {
     public OneDegreeHelper() {
 
     }
+    
+    public static string checkNull(String value) {
+        if(value == null) {
+            return '';
+        }else {
+            return value;
+        }
+    }
 
     public static string getTags(List<string> tags) {
         String result;

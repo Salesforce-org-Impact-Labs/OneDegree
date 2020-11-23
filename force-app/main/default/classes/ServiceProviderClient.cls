@@ -75,6 +75,7 @@ public class ServiceProviderClient {
                                                             refrec__External_ID__c = serviceExtId,
                                                             refrec__Description__c = OneDegreeHelper.getTags(oppty.tags),
 															refrec__Type__c = provider_type,
+															refrec__State__c = OneDegreeHelper.checkNull(loc.state),
 															refrec__service_tags__c = service_tags,
 															refrec__situation_tags__c = situation_tags,
                                                             refrec__Website__c = location_url);
