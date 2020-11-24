@@ -8,14 +8,13 @@ public class GeoCodingService {
         ServiceProvider spGeoCoding = spFactory.getServiceProvider('GeoCoding');        
         ServiceResults geoCodingResults = spFactoryResults.getServiceProviderResults('GeoCodingResults');
 	    
-        Map<String, One_Degree_Zipcode_Search__mdt> zipcodes = new Map<String, One_Degree_Zipcode_Search__mdt>();
-        List<One_Degree_Zipcode_Search__mdt> zipCodesUpdated = new List<One_Degree_Zipcode_Search__mdt>();
+        Map<String, OD_Zipcode__c> zipcodes = new Map<String, OD_Zipcode__c>();
+        List<OD_Zipcode__c> zipCodesUpdated = new List<OD_Zipcode__c>();
         
-		string queryserviceZipCodes = 'SELECT Id, MasterLabel, DeveloperName, Zipcode__c, lat__c, long__c ' +
-											'FROM One_Degree_Zipcode_Search__mdt ' +
-            								'ORDER BY Zipcode__c';
-		List<One_Degree_Zipcode_Search__mdt> serviceZipCodes = new CustomMetadataDAO().getCustomMetadataRecords(queryserviceZipCodes);
-		for(One_Degree_Zipcode_Search__mdt serviceZipCode : serviceZipCodes) { 
+		List<OD_Zipcode__c> serviceZipCodes = [SELECT Id, Zipcode__c, Latitude__c , Longitude__c
+                                              		FROM OD_Zipcode__c
+                                              		ORDER BY Zipcode__c];
+		for(OD_Zipcode__c serviceZipCode : serviceZipCodes) { 
             System.debug(LoggingLevel.DEBUG, '---> zipcode ' + serviceZipCode);
             zipcodes.put(serviceZipCode.Zipcode__c, serviceZipCode);
         }
@@ -52,9 +51,10 @@ public class GeoCodingService {
                                 System.debug(LoggingLevel.DEBUG, '---> postal code ' + addrComponent.long_name);
                                 
                                 if(zipcodes.containsKey(addrComponent.long_name)) {
-									One_Degree_Zipcode_Search__mdt zipcodeObject = zipcodes.get(addrComponent.long_name);
-                                    zipcodeObject.lat__c = String.valueOf(loc.lat);
-									zipcodeObject.long__c = String.valueOf(loc.lng);
+									OD_Zipcode__c zipcodeObject = zipcodes.get(addrComponent.long_name);
+                                    zipcodeObject.Id = zipcodeObject.Id;
+                                    zipcodeObject.Latitude__c  = loc.lat;
+									zipcodeObject.Longitude__c  = loc.lng;
                                     zipCodesUpdated.add(zipcodeObject);
                                 }
                             }
@@ -70,7 +70,9 @@ public class GeoCodingService {
         //update metadata now
         if(!Test.isRunningTest()) {
         	// update metadata with latitude and longitude
-        	String jobId2 = MetaDataUtility.upsertMetadata(zipCodesUpdated);                    
+            if(zipCodesUpdated.size() > 0) {
+                update zipCodesUpdated;
+            }
         }        
     }
     

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Distance__c</fullName>
+    <defaultValue>10</defaultValue>
     <description>The radius in kilometers around the coordinates specified in which to search. Ref https://github.com/1deg/resource-server-api-docs/blob/master/docs/common/query.md</description>
     <externalId>false</externalId>
     <inlineHelpText>The radius in kilometers around the coordinates specified in which to search.</inlineHelpText>

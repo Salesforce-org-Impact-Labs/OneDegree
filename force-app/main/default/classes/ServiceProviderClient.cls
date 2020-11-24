@@ -78,6 +78,8 @@ public class ServiceProviderClient {
 															refrec__State__c = OneDegreeHelper.checkNull(loc.state),
 															refrec__service_tags__c = service_tags,
 															refrec__situation_tags__c = situation_tags,
+															refrec__Location__latitude__s = loc.lat,
+                                                            refrec__Location__longitude__s = loc.long_z,
                                                             refrec__Website__c = location_url);
                         //create account reference using account number
                         Account acctReference = new Account(External_ID__c = accountExtId);
