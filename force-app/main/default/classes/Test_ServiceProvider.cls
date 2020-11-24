@@ -165,16 +165,6 @@ public class Test_ServiceProvider {
         authSet.put('MethodType', 'POST');        
         
     	Map<String, String> querySet = new Map<String, String>();
-        //get all attribute tags
-        string queryAttributeTag = 'SELECT Id, MasterLabel, DeveloperName, Attribute_Tag__c, Last_Run_Datetime__c ' +
-            						'FROM One_Degree_Attribute_Setting__mdt WHERE Active__c = true LIMIT 1' ;
-        string jsonAttribute = '[{"Attribute_Tag__c":"health clinic", "Active__c":true}]';
-
-        Test_CustomMetadataDAO.setMetadata(queryAttributeTag, 
-                                           (List<One_Degree_Attribute_Setting__mdt>) JSON.deserialize(jsonAttribute, List<One_Degree_Attribute_Setting__mdt>.class)
-                                          );
-        One_Degree_Attribute_Setting__mdt[] attributeTags = new CustomMetaDataDAO().getCustomMetadataRecords(queryAttributeTag);
-        
         // get all zipcodes
 		Map<string, SearchParams> searchParamsList = getQueryString();
 
