@@ -104,5 +104,20 @@ public class ServiceProviderHelper {
         }
         // dedup matching for service records - end
         return updateServiceRecords;
+    }
+
+    public static String getStringValues(List<String> values ) {
+        string result = '';
+        integer counter = 0;
+        for(string s : values) {
+            if(counter == 0) {
+                result = s;
+            }else {
+            	result = result + ',' + s;                
+            }
+
+            counter++;
+        }
+        return result;
     }    
 }

@@ -3,15 +3,15 @@
     <actionOnInsert>Allow</actionOnInsert>
     <actionOnUpdate>Allow</actionOnUpdate>
     <alertText>Use one of these records?</alertText>
-    <description>OneDegree Service Provider Rule</description>
+    <description>Duplicate matching based on External Id</description>
     <duplicateRuleFilter xsi:nil="true"/>
     <duplicateRuleMatchRules>
         <matchRuleSObjectType>refrec__Service__c</matchRuleSObjectType>
-        <matchingRule>Service_Provider_Matching_Rule</matchingRule>
+        <matchingRule>Service_Provider_Duplicate_Rule_matching_rule</matchingRule>
         <objectMapping xsi:nil="true"/>
     </duplicateRuleMatchRules>
     <isActive>true</isActive>
-    <masterLabel>OneDegree Service Provider Rule</masterLabel>
+    <masterLabel>Service Provider Duplicate Rule</masterLabel>
     <operationsOnInsert>Alert</operationsOnInsert>
     <operationsOnInsert>Report</operationsOnInsert>
     <securityOption>EnforceSharingRules</securityOption>

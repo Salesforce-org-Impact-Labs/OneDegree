@@ -17,6 +17,40 @@ public class Test_ServiceProvider {
         testAccts.add(testAcct2);
         
         insert testAccts;
+        
+        
+        //insert zip codes with lat and long
+        List<OD_Zipcode__c> zipcodesList = new List<OD_Zipcode__c>();
+		OD_Zipcode__c zipcodes = new OD_Zipcode__c();
+        zipcodes.Zipcode__c = '94118';
+        zipcodes.Latitude__c = 37.78228910;
+        zipcodes.Longitude__c = -122.4637080;
+        zipcodes.Distance__c = 10;
+		zipcodes.Results__c = 20;
+        zipcodesList.add(zipcodes);
+        
+		OD_Zipcode__c zipcodes2 = new OD_Zipcode__c();
+        zipcodes2.Zipcode__c = '94117';
+        zipcodes2.Latitude__c = 30.78228910;
+        zipcodes2.Longitude__c = -100.4637080;
+        zipcodes2.Distance__c = 10;
+		zipcodes2.Results__c = 20;
+        zipcodesList.add(zipcodes2);        
+        insert zipcodesList;
+        //insert areas of search
+        List<OD_Search_Area__c> searchAreaList = new List<OD_Search_Area__c>();
+        OD_Search_Area__c searchArea = new OD_Search_Area__c();
+        searchArea.Area__c = 'Food';
+		searchArea.Program_Area__c = 'Food';
+        searchArea.OD_Zipcode__c = zipcodesList[0].Id;
+        
+        OD_Search_Area__c searchArea2 = new OD_Search_Area__c();
+        searchArea2.Area__c = 'Housing';
+		searchArea2.Program_Area__c = 'Housing';
+        searchArea2.OD_Zipcode__c = zipcodesList[1].Id;        
+        
+        searchAreaList.add(searchArea);
+        insert searchAreaList;
         // Create test services
         List<refrec__Service__c> testServices = new List<refrec__Service__c>();
         
@@ -115,7 +149,7 @@ public class Test_ServiceProvider {
         
         
         Map<String, String> authSet = new Map<String, String>();
-        List<String> queryParams = new List<String>();
+
         string queryAuth = 'SELECT MasterLabel, DeveloperName, API_Key__c , ' +
             					'Hostname__c ' +
             					'FROM One_Degree_Auth_Setting__mdt LIMIT 1';
@@ -130,40 +164,25 @@ public class Test_ServiceProvider {
         authSet.put('Hostname__c', abSetting[0].Hostname__c);
         authSet.put('MethodType', 'POST');        
         
-		Set<String> querySet = new Set<String>();
-        //get all attribute tags
-        string queryAttributeTag = 'SELECT Id, MasterLabel, DeveloperName, Attribute_Tag__c, Last_Run_Datetime__c ' +
-            						'FROM One_Degree_Attribute_Setting__mdt WHERE Active__c = true LIMIT 1' ;
-        string jsonAttribute = '[{"Attribute_Tag__c":"health clinic", "Active__c":true}]';
-
-        Test_CustomMetadataDAO.setMetadata(queryAttributeTag, 
-                                           (List<One_Degree_Attribute_Setting__mdt>) JSON.deserialize(jsonAttribute, List<One_Degree_Attribute_Setting__mdt>.class)
-                                          );
-        One_Degree_Attribute_Setting__mdt[] attributeTags = new CustomMetaDataDAO().getCustomMetadataRecords(queryAttributeTag);
-        
+    	Map<String, String> querySet = new Map<String, String>();
         // get all zipcodes
-        string queryZipcode = 'SELECT Zipcode__c from One_Degree_Zipcode_Search__mdt';
-        string jsonZipcode = '[{"Zipcode__c":"94105"}]';
-        Test_CustomMetadataDAO.setMetadata(queryZipcode, 
-                                           (List<One_Degree_Zipcode_Search__mdt>) JSON.deserialize(jsonZipcode, List<One_Degree_Zipcode_Search__mdt>.class)
-                                          );        
-        List<One_Degree_Zipcode_Search__mdt> serviceZipCodes = new CustomMetaDataDAO().getCustomMetadataRecords(queryZipcode);
+		Map<string, SearchParams> searchParamsList = getQueryString();
 
-        for(One_Degree_Zipcode_Search__mdt serviceZipCode : serviceZipCodes) {
-            System.debug(LoggingLevel.DEBUG, '---> zip code ' + serviceZipCode.Zipcode__c);
-            for (One_Degree_Attribute_Setting__mdt attributeTag : attributeTags) {
-                System.debug(LoggingLevel.DEBUG, '---> attribute tag ' + attributeTag.Attribute_Tag__c);
-                System.debug(LoggingLevel.DEBUG, '---> active flag ' + attributeTag.Active__c);
-                String query = authSet.get('Hostname__c') + '/opportunities?api_key='+ authSet.get('API_Key__c') +
-                                '&query[lat]='+serviceZipCode.lat__c + '&query[long]='+serviceZipCode.long__c + '&query[distance]=10&per_page=10';
-                querySet.add(query);
-            }
+        for(SearchParams s : searchParamsList.values()) {
+                String query = authSet.get('Hostname__c') + 'opportunities?api_key='+ authSet.get('API_Key__c') +
+                                    '&query[lat]='+s.latitude + 
+                    				'&query[long]='+s.longitude + 
+                    				'&query[text]='+s.area + 
+                    				'&query[distance]=' + s.distance + 
+                    				'&per_page=' + s.results;
+                querySet.put(query, s.program_area);                
         }
-        for(String s : querySet) {
-            System.debug(LoggingLevel.DEBUG, '---> query url ' + s);
-            queryParams.add(s);
-
-        }         
+        Map<String, String> queryParams = new Map<String, String>();
+        for(String s : querySet.keySet()) {
+            string program_area = querySet.get(s);
+            System.debug(LoggingLevel.DEBUG, '---> query url ' + s + ', program area ' + program_area);
+            queryParams.put(s, program_area);
+        }
         
         
         Test.startTest();
@@ -239,6 +258,55 @@ public class Test_ServiceProvider {
         Metadata.DeployCallbackContext context = new Metadata.DeployCallbackContext();
         // Invoke the callback's handleResult method.
         callback.handleResult(result, context);        
+    }
+
+    private static Map<string, SearchParams> getQueryString() {
+	    Set<String> querySet = new Set<String>();
+		Set<Id> zipcodeIds = new Set<Id>();
+        Map<string, SearchParams> zipcodeList = new Map<string, SearchParams>();
+        Map<string, SearchParams> searchParamsList = new Map<string, SearchParams>();
+        
+        List<OD_Zipcode__c> zipcodes = [SELECT Id, Zipcode__c, Latitude__c, Longitude__c, Distance__c, Results__c
+                                         FROM OD_Zipcode__c];
+        for(OD_Zipcode__c zipcode : zipcodes) {
+            zipcodeIds.add(zipcode.Id);
+			SearchParams zipcodeParams = new SearchParams();
+            zipcodeParams.guid = zipcode.Id;
+            zipcodeParams.zipcode = zipcode.Zipcode__c;
+            zipcodeParams.latitude = zipcode.Latitude__c;
+            zipcodeParams.longitude = zipcode.Longitude__c;
+            zipcodeParams.distance = zipcode.Distance__c;
+            zipcodeParams.results = zipcode.Results__c;
+            zipcodeList.put(zipcode.Id, zipcodeParams);
+           System.debug(zipcode.Zipcode__c);
+        }
+    	List<OD_Search_Area__c> areas = [SELECT OD_Zipcode__c, Area__c, Program_Area__c
+                                     FROM OD_Search_Area__c 
+                                     WHERE OD_Zipcode__c = :zipcodeIds];
+        for(OD_Search_Area__c area : areas) {
+            // search the previous search param set
+            // get the zipcode values
+            SearchParams s = zipcodeList.get(area.OD_Zipcode__c);
+            if(s.guid != null) {
+				SearchParams areaSearchParams = new SearchParams();
+                areaSearchParams.guid = area.Id;
+            	areaSearchParams.zipcode = s.zipcode;
+            	areaSearchParams.latitude = s.latitude;
+            	areaSearchParams.longitude = s.longitude;
+            	areaSearchParams.distance = s.distance;
+            	areaSearchParams.results = s.results;
+                areaSearchParams.area = area.Area__c;
+                areaSearchParams.program_area = area.Program_Area__c;
+                searchParamsList.put(area.Id, areaSearchParams);
+            }else {
+                System.debug(LoggingLevel.DEBUG, '---> Error : No Zipcode');
+            }
+        }
+        if(searchParamsList.size() > 0) {
+            System.debug(LoggingLevel.DEBUG, '---> search params size ' + searchParamsList.size());
+            return searchParamsList;
+        }
+        return null;
     }    
     
 }

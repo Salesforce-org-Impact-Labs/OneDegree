@@ -12,10 +12,10 @@ global class GeoCodingServiceQueueable implements Queueable, Database.AllowsCall
     }
     
     global void execute(QueueableContext context) {
-		string queryserviceZipCodes = 'SELECT Id, MasterLabel, DeveloperName, Zipcode__c, lat__c, long__c FROM One_Degree_Zipcode_Search__mdt ORDER BY Zipcode__c';
-		List<One_Degree_Zipcode_Search__mdt> serviceZipCodes = new CustomMetadataDAO().getCustomMetadataRecords(queryserviceZipCodes);        
+		string queryserviceZipCodes = 'SELECT Id, Zipcode__c, Latitude__c , Longitude__c  FROM OD_Zipcode__c';
+		List<OD_Zipcode__c> serviceZipCodes = [SELECT Id, Zipcode__c, Latitude__c , Longitude__c  FROM OD_Zipcode__c];
 
-        for(One_Degree_Zipcode_Search__mdt serviceZipCode : serviceZipCodes) {
+        for(OD_Zipcode__c serviceZipCode : serviceZipCodes) {
             String query = authSet.get('Hostname__c') + '?address=' + serviceZipCode.Zipcode__c + '&key=' + authSet.get('API_Key__c');
             querySet.add(query);
         }

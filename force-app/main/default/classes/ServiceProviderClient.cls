@@ -1,6 +1,6 @@
 public class ServiceProviderClient {
 
-    private static void oneDegreeServiceController(Map<String, String> authParams, String[] queryParams) {
+    private static void oneDegreeServiceController(Map<String, String> authParams, Map<string, string> queryParams) {
 
         List<Account> acctRecords = new List<Account>();
         List<refrec__Service__c> serviceRecords = new List<refrec__Service__c>();
@@ -18,9 +18,9 @@ public class ServiceProviderClient {
         for(String s : authParams.keySet()) {
             System.debug(LoggingLevel.DEBUG, '---> key ' + s + ', value ' + authParams.get(s));
         }
-        for(String s : queryParams) {
+        for(String s : queryParams.keySet()) {
             System.debug(LoggingLevel.DEBUG,  'value ' + s);
-
+			string provider_type = queryParams.get(s);
 
             String method = 'GET';
             // string odQuery = EncodingUtil.urlEncode('health clinic', 'UTF-8');
@@ -64,6 +64,8 @@ public class ServiceProviderClient {
                         }
                         serviceExtId = String.valueOf(oppty.id + '-' + org.id+'-'+loc.id);
                         accountExtId = String.valueOf(oppty.id + '-' + org.id);
+                        string service_tags = ServiceProviderHelper.getStringValues(oppty.tags);
+                        string situation_tags = ServiceProviderHelper.getStringValues(oppty.categories);
                         refrec__Service__c  serviceReference = new refrec__Service__c(refrec__External_ID__c = serviceExtId);                    
                         refrec__Service__c newService = new refrec__Service__c(Name = loc.Name, 
                                                             refrec__Street__c = loc.address, 
@@ -72,6 +74,12 @@ public class ServiceProviderClient {
                                                             refrec__Zip_Code__c = loc.zip_code,
                                                             refrec__External_ID__c = serviceExtId,
                                                             refrec__Description__c = OneDegreeHelper.getTags(oppty.tags),
+															refrec__Type__c = provider_type,
+															refrec__State__c = OneDegreeHelper.checkNull(loc.state),
+															refrec__service_tags__c = service_tags,
+															refrec__situation_tags__c = situation_tags,
+															refrec__Location__latitude__s = loc.lat,
+                                                            refrec__Location__longitude__s = loc.long_z,
                                                             refrec__Website__c = location_url);
                         //create account reference using account number
                         Account acctReference = new Account(External_ID__c = accountExtId);
@@ -130,7 +138,7 @@ public class ServiceProviderClient {
     }
 
     @future(callout=true)
-    public static void processOneDegreeService(Map<String, String> authParams, String[] queryParams) {
+    public static void processOneDegreeService(Map<String, String> authParams, Map<string, string> queryParams) {
         oneDegreeServiceController(authParams, queryParams);
     }      
 }

@@ -1,6 +1,6 @@
 global class OneDegreeServiceQueueable implements Queueable, Database.AllowsCallouts {
 
-    Set<String> querySet = new Set<String>();
+    Map<String, String> querySet = new Map<String, String>();
     Map<String, String> authSet = new Map<String, String>();
 
     global OneDegreeServiceQueueable() {
@@ -19,33 +19,79 @@ global class OneDegreeServiceQueueable implements Queueable, Database.AllowsCall
             							'FROM One_Degree_Attribute_Setting__mdt WHERE Active__c = true ' +
             							'LIMIT 1';
 		One_Degree_Attribute_Setting__mdt[] attributeTags = new CustomMetadataDAO().getCustomMetadataRecords(queryAttributeTags);	        
-		// get service zipcodes from metadata 
-		string queryserviceZipCodes = 'SELECT Zipcode__c, lat__c, long__c ' +
-											'FROM One_Degree_Zipcode_Search__mdt ' +
-											'WHERE lat__c != null ' +
-            								'AND long__c != null';
-		List<One_Degree_Zipcode_Search__mdt> serviceZipCodes = new CustomMetadataDAO().getCustomMetadataRecords(queryserviceZipCodes);        
 
-        for(One_Degree_Zipcode_Search__mdt serviceZipCode : serviceZipCodes) {
-            String query = authSet.get('Hostname__c') + '/opportunities?api_key='+ authSet.get('API_Key__c') +
-                                '&query[lat]='+serviceZipCode.lat__c + '&query[long]='+serviceZipCode.long__c + '&query[distance]=10&per_page=100';
-            querySet.add(query);
+		Map<string, SearchParams> searchParamsList = getQueryString();
+        if(searchParamsList.size() > 0) {
+            for(SearchParams s : searchParamsList.values()) {
+                String query = authSet.get('Hostname__c') + 'opportunities?api_key='+ authSet.get('API_Key__c') +
+                                    '&query[lat]='+s.latitude + 
+                    				'&query[long]='+s.longitude + 
+                    				'&query[text]='+s.area + 
+                    				'&query[distance]=' + s.distance + 
+                    				'&per_page=' + s.results;
+                querySet.put(query, s.program_area);                
+            }            
         }
-        List<String> queryParams = new List<String>();
-        for(String s : querySet) {
-            System.debug(LoggingLevel.DEBUG, '---> query url ' + s);
-            queryParams.add(s);
-        }                
+        Map<String, String> queryParams = new Map<String, String>();
+        for(String s : querySet.keySet()) {
+            string program_area = querySet.get(s);
+            System.debug(LoggingLevel.DEBUG, '---> query url ' + s + ', program area ' + program_area);
+            queryParams.put(s, program_area);
+        }
         if(!System.isFuture()) {
             System.debug(LoggingLevel.DEBUG, '---> processing One Degree service - start.');
             ServiceProviderClient.processOneDegreeService(authSet, queryParams);
             System.debug(LoggingLevel.DEBUG, '---> processing One Degree service - end.');            
         }
-        if(!Test.isRunningTest()) {
-        	// update metadata with last run date time stamp
-        	attributeTags[0].Last_Run_Datetime__c = System.datetime.now();
-        	String jobId2 = MetaDataUtility.upsertMetadata(attributeTags);                    
-        }        
 
+    }
+    
+    private Map<string, SearchParams> getQueryString() {
+	    Set<String> querySet = new Set<String>();
+		Set<Id> zipcodeIds = new Set<Id>();
+        Map<string, SearchParams> zipcodeList = new Map<string, SearchParams>();
+        Map<string, SearchParams> searchParamsList = new Map<string, SearchParams>();
+        
+        List<OD_Zipcode__c> zipcodes = [SELECT Id, Zipcode__c, Latitude__c, Longitude__c, Distance__c, Results__c
+                                         FROM OD_Zipcode__c];
+        for(OD_Zipcode__c zipcode : zipcodes) {
+            zipcodeIds.add(zipcode.Id);
+			SearchParams zipcodeParams = new SearchParams();
+            zipcodeParams.guid = zipcode.Id;
+            zipcodeParams.zipcode = zipcode.Zipcode__c;
+            zipcodeParams.latitude = zipcode.Latitude__c;
+            zipcodeParams.longitude = zipcode.Longitude__c;
+            zipcodeParams.distance = zipcode.Distance__c;
+            zipcodeParams.results = zipcode.Results__c;
+            zipcodeList.put(zipcode.Id, zipcodeParams);
+           System.debug(zipcode.Zipcode__c);
+        }
+    	List<OD_Search_Area__c> areas = [SELECT OD_Zipcode__c, Area__c, Program_Area__c
+                                     FROM OD_Search_Area__c 
+                                     WHERE OD_Zipcode__c = :zipcodeIds];
+        for(OD_Search_Area__c area : areas) {
+            // search the previous search param set
+            // get the zipcode values
+            SearchParams s = zipcodeList.get(area.OD_Zipcode__c);
+            if(s.guid != null) {
+				SearchParams areaSearchParams = new SearchParams();
+                areaSearchParams.guid = area.Id;
+            	areaSearchParams.zipcode = s.zipcode;
+            	areaSearchParams.latitude = s.latitude;
+            	areaSearchParams.longitude = s.longitude;
+            	areaSearchParams.distance = s.distance;
+            	areaSearchParams.results = s.results;
+                areaSearchParams.area = area.Area__c;
+                areaSearchParams.program_area = area.Program_Area__c;
+                searchParamsList.put(area.Id, areaSearchParams);
+            }else {
+                System.debug(LoggingLevel.DEBUG, '---> Error : No Zipcode');
+            }
+        }
+        if(searchParamsList.size() > 0) {
+            System.debug(LoggingLevel.DEBUG, '---> search params size ' + searchParamsList.size());
+            return searchParamsList;
+        }
+        return null;
     }
 }
