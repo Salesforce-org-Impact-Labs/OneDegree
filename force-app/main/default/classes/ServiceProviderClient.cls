@@ -67,20 +67,23 @@ public class ServiceProviderClient {
                         string service_tags = ServiceProviderHelper.getStringValues(oppty.tags);
                         string situation_tags = ServiceProviderHelper.getStringValues(oppty.categories);
                         refrec__Service__c  serviceReference = new refrec__Service__c(refrec__External_ID__c = serviceExtId);                    
-                        refrec__Service__c newService = new refrec__Service__c(Name = loc.Name, 
+                        refrec__Service__c newService = new refrec__Service__c(
+                            								Name = loc.Name, 
                                                             refrec__Street__c = loc.address, 
                                                             refrec__City__c = loc.city,
                                                             refrec__Phone__c = phones.size() > 0 ? phones[0].digits : '',
                                                             refrec__Zip_Code__c = loc.zip_code,
                                                             refrec__External_ID__c = serviceExtId,
-                                                            refrec__Description__c = OneDegreeHelper.getTags(oppty.tags),
+                                                            refrec__Description__c = oppty.description,
 															refrec__Type__c = provider_type,
+                            								refrec__All_Types__c = provider_type,
 															refrec__State__c = OneDegreeHelper.checkNull(loc.state),
 															refrec__service_tags__c = service_tags,
 															refrec__situation_tags__c = situation_tags,
 															refrec__Location__latitude__s = loc.lat,
                                                             refrec__Location__longitude__s = loc.long_z,
-                                                            refrec__Website__c = location_url);
+                                                            refrec__Website__c = location_url
+                        							);
                         //create account reference using account number
                         Account acctReference = new Account(External_ID__c = accountExtId);
                         newService.refrec__Account__r = acctReference;
