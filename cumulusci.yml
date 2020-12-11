@@ -12,6 +12,12 @@ project:
     - github: https://github.com/Salesforce-org-Impact-Labs/01HousingandHomelessness
 
 tasks:
+  list_changes:
+    options:
+      exclude: "Profile:,Application:,Flow:"
+  retrieve_changes:
+    options:
+      exclude: "Profile:,Application:,Flow:"
   robot:
     options:
       suites: robot/OneDegree/tests
