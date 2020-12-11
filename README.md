@@ -4,6 +4,15 @@
 
 One Degree Service Provider
 
+## Release Links (Beta 5)
+https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002Xxve
+
+## Release Notes (12/11/2020)
+
+# All Types populated
+# Description mapped to proper opportunity description.
+# Provider Name mapped to title.
+
 ## Development
 
 To work on this project in a scratch org:
