@@ -137,5 +137,85 @@ public class OneDegreeHelper {
         return ohs;
     }
 
+    //Get the properties map, return SM field map and DML construct
+    public static Set<String> mapSMOneDegreeFields(String serviceId, List<String> areas, List<String> categories, List<String> tags){
+        System.debug(LoggingLevel.DEBUG, '---> service Id ' + serviceId);
+        System.debug(LoggingLevel.DEBUG, '---> areas size ' + areas.size());
+        System.debug(LoggingLevel.DEBUG, '---> categories size ' + categories.size());
+        System.debug(LoggingLevel.DEBUG, '---> tags size ' + tags.size());
+        //MAKE 3 loops
+        Set<String> SMFields = new Set<String>();  
+        String sArea = '';
+        String sCategory = '';
+        String sTag = '';
+        for(String area : areas) {
+            sArea = area;
+            for(String category : categories) {
+                sCategory = category;
+                for(String tag : tags) {
+                    sTag = tag;
+                    String criteria = sArea + ',' + sCategory + ',' + sTag;
+                    System.debug(LoggingLevel.DEBUG, '---> criteria ' + criteria); 
+                    Map<String, Set<String>> data = createSMODPropertiesMap(criteria);
+                    if(data.size() > 0 && data != null) {
+                        for(String prop : data.keySet()) {
+                            System.debug(LoggingLevel.DEBUG, '---> key ' + prop);
+                            Set<String> values = data.get(prop);
+                            System.debug(LoggingLevel.DEBUG, '---> values ' + values);
+                            for(String val : values) {
+                                System.debug(LoggingLevel.DEBUG, '---> SM Fields : ' + val);
+                                SMFields.add(val);
+                            }
+                        }
+                    }else {
+                        System.debug(LoggingLevel.DEBUG, '---> No matches found.');
+                    }                    
+                } //end of tags loop
+            } //end of categories loop
+        } // end of areas loop
+        return SMFields;
+    }
 
+    private static Map<String, Set<String>> createSMODPropertiesMap(String criteria) {
+        string query = 'SELECT MasterLabel, DeveloperName, ' +
+                        'OD_Mapped_Values__c ,SM_Field__c ' +
+                        'FROM One_Degree__mdt WHERE OD_Mapped_Values__c = \'' +  criteria.toLowerCase() + '\' ORDER BY SM_Field__c ASC' ;
+        Map<String, Set<String>> data = new Map<String, Set<String>>();
+        Map<String, Set<String>> dataByFieldValue = new Map<String, Set<String>>();
+        List<String> properties = new List<String>();
+        Set<String> SMfields = new Set<String>();
+        List<One_Degree__mdt> props = new CustomMetadataDAO().getCustomMetadataRecords(query);
+        for(One_Degree__mdt prop : props) {
+            System.debug(LoggingLevel.DEBUG, 'OD Fields ---> ' + prop.OD_Mapped_Values__c);
+            System.debug(LoggingLevel.DEBUG, 'OD Fields ---> ' + prop.SM_Field__c);
+            SMfields.add(prop.SM_Field__c);
+        }
+        data.put(criteria, SMfields); 
+        if(!data.isEmpty()) {
+            return data;
+        }       
+        return null;
+    }
+
+    public static List<Integer> getMinMaxAge(String serviceId, OneDegreeDataWrapper.Properties prop) {
+        List<Integer> minMaxAge = new List<Integer>();
+        // initialize
+        minMaxAge.add(0);
+        minMaxAge.add(0);
+        //index 0 is min, 1 is max
+        if(prop.elig_age_or_over != null && Integer.valueOf(prop.elig_age_or_over) > 0) {
+                minMaxAge[0] = Integer.valueOf(prop.elig_age_or_over);
+        }
+        if(prop.elig_age_or_under != null && Integer.valueOf(prop.elig_age_or_under) > 0) {
+                minMaxAge[1] = Integer.valueOf(prop.elig_age_or_under);
+        }
+        if(minMaxAge[0] == 0 && minMaxAge[1] > 0) {
+            minMaxAge[0] = 1;
+        }
+        if(minMaxAge[0] > 0 && minMaxAge[1]== 0) {
+            minMaxAge[1] = 100;
+        }        
+        System.debug(LoggingLevel.DEBUG, '---> Age ' + serviceId + ',' + minMaxAge[0] + ',' + minMaxAge[1]);
+        return minMaxAge;
+    }
 }
