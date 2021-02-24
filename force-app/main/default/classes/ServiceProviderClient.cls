@@ -181,7 +181,7 @@ public class ServiceProviderClient {
         ServiceProviderHelper.insertSObjectRecords(sobjList);        
     }
 
-    @future(callout=true)
+    //@future(callout=true)
     public static void processOneDegreeService(Map<String, String> authParams, Map<string, string> queryParams) {
         oneDegreeServiceController(authParams, queryParams);
     }      

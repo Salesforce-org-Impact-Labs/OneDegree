@@ -210,10 +210,10 @@ public class OneDegreeHelper {
                 minMaxAge[1] = Integer.valueOf(prop.elig_age_or_under);
         }
         if(minMaxAge[0] == 0 && minMaxAge[1] > 0) {
-            minMaxAge[0] = 1;
+            minMaxAge[0] = 0;
         }
         if(minMaxAge[0] > 0 && minMaxAge[1]== 0) {
-            minMaxAge[1] = 100;
+            minMaxAge[1] = 120;
         }        
         System.debug(LoggingLevel.DEBUG, '---> Age ' + serviceId + ',' + minMaxAge[0] + ',' + minMaxAge[1]);
         return minMaxAge;
