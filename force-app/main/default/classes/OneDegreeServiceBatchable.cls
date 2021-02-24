@@ -65,7 +65,7 @@ global class OneDegreeServiceBatchable implements
                     queryParams.put(s, program_area);
                 }
                 System.debug(LoggingLevel.DEBUG, '---> processing One Degree service - start.');
-                //ServiceProviderClient.processOneDegreeService(authSet, queryParams);
+                ServiceProviderClient.processOneDegreeService(authSet, queryParams);
                 Datetime endDateTime = System.Datetime.now(); // returns date time value in GMT time zone.
                 jobTimes.add(endDateTime);
                 logJobTimes.put(area.Id, jobTimes);
