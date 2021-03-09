@@ -16,16 +16,16 @@ https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002XxwD
 ## Testing
 
 ### Step 1
-  Populate respective api keys in custom metadata "Geo Coding Auth Setting" and "One Degree Auth Setting"
+  Populate respective api keys in custom metadata<br/> "Geo Coding Auth Setting" and "One Degree Auth Setting"
 ### Step 2
   Create zipcodes and relevant search records for each zipcode in OD Zipcodes object
 ### Step 3
-  Execute the geo coding service in developer console:
-    GeoCodingServiceQueueable geo_svc = new GeoCodingServiceQueueable();
-    ID jobID = System.enqueueJob(geo_svc);  
+  Execute the geo coding service in developer console:<br/>
+    svc_onedegree.GeoCodingServiceQueueable geo_svc = new svc_onedegree.GeoCodingServiceQueueable();
+    ID jobID = System.enqueueJob(geo_svc);
 ### Step 4
-  Once step 3 is complete, execute one degree batch job in developer console:
-    Id batchId = Database.executeBatch(new OneDegreeServiceBatchable(), 1);
+  Once step 3 is complete, execute one degree batch job in developer console:<br/>
+    Id batchId = Database.executeBatch(new svc_onedegree.OneDegreeServiceBatchable(), 1);
 
 ## Development
 
