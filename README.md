@@ -14,7 +14,7 @@ https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002XxwD
 3) Batch job to execute long running zipcodes
 
 ## Testing
-
+[![SC2 Video]](https://drive.google.com/file/d/1iCykc20FrrTjNRaOKnbIR5RMge4TlBSK/view?usp=drivesdk)
 ### Step 1
   Populate respective api keys in custom metadata<br/> "Geo Coding Auth Setting" and "One Degree Auth Setting"
 ### Step 2
