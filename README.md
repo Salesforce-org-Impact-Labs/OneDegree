@@ -7,7 +7,7 @@ One Degree Service Provider
 ## Release Links (Beta 6)
 https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002XxwD
 
-## Release Notes (13/09/202)
+## Release Notes (13/09/2021)
 
 1) Properties mapped to populate Housing and Employement section criteria's.
 2) Eligibility of minimum age and maximum age set.
