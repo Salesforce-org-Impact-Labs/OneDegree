@@ -7,11 +7,25 @@ One Degree Service Provider
 ## Release Links (Beta 6)
 https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002XxwD
 
-## Release Notes (12/11/2020)
+## Release Notes (13/09/202)
 
-1) All Types populated
-2) Description mapped to proper opportunity description.
-3) Provider Name mapped to title.
+1) Properties mapped to populate Housing and Employement section criteria's.
+2) Eligibility of minimum age and maximum age set.
+3) Batch job to execute long running zipcodes
+
+## Testing
+
+### Step 1
+  Populate respective api keys in custom metadata "Geo Coding Auth Setting" and "One Degree Auth Setting"
+### Step 2
+  Create zipcodes and relevant search records for each zipcode in OD Zipcodes object
+### Step 3
+  Execute the geo coding service in developer console:
+    GeoCodingServiceQueueable geo_svc = new GeoCodingServiceQueueable();
+    ID jobID = System.enqueueJob(geo_svc);  
+### Step 4
+  Once step 3 is complete, execute one degree batch job in developer console:
+    Id batchId = Database.executeBatch(new OneDegreeServiceBatchable(), 1);
 
 ## Development
 
