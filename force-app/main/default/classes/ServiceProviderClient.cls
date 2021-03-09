@@ -37,9 +37,10 @@ public class ServiceProviderClient {
             try{
                 String serviceExtId;
                 String accountExtId;
-
+                Integer counter = 0;
                 OneDegreeDataWrapper odObject = OneDegreeDataWrapper.parse(odQueryResult);
                 List<OneDegreeDataWrapper.Opportunities> opportunities = odObject.opportunities;
+                System.debug(LoggingLevel.DEBUG, 'total # of opptys ' + opportunities.size());
                 for(OneDegreeDataWrapper.Opportunities oppty : opportunities) {
                     //System.debug(LoggingLevel.DEBUG, '---> oppty id ' + oppty.id);
                     OneDegreeDataWrapper.Organization org = oppty.organization;
@@ -64,26 +65,67 @@ public class ServiceProviderClient {
                         }
                         serviceExtId = String.valueOf(oppty.id + '-' + org.id+'-'+loc.id);
                         accountExtId = String.valueOf(oppty.id + '-' + org.id);
+                        System.debug(LoggingLevel.DEBUG, counter++ + '.)' + serviceExtId);
+                        
                         string service_tags = ServiceProviderHelper.getStringValues(oppty.tags);
                         string situation_tags = ServiceProviderHelper.getStringValues(oppty.categories);
-                        refrec__Service__c  serviceReference = new refrec__Service__c(refrec__External_ID__c = serviceExtId);                    
-                        refrec__Service__c newService = new refrec__Service__c(
-                            								Name = loc.Name, 
-                                                            refrec__Street__c = loc.address, 
-                                                            refrec__City__c = loc.city,
-                                                            refrec__Phone__c = phones.size() > 0 ? phones[0].digits : '',
-                                                            refrec__Zip_Code__c = loc.zip_code,
-                                                            refrec__External_ID__c = serviceExtId,
-                                                            refrec__Description__c = oppty.description,
-															refrec__Type__c = provider_type,
-                            								refrec__All_Types__c = provider_type,
-															refrec__State__c = OneDegreeHelper.checkNull(loc.state),
-															refrec__service_tags__c = service_tags,
-															refrec__situation_tags__c = situation_tags,
-															refrec__Location__latitude__s = loc.lat,
-                                                            refrec__Location__longitude__s = loc.long_z,
-                                                            refrec__Website__c = location_url
-                        							);
+                        
+
+
+                        refrec__Service__c  serviceReference = new refrec__Service__c(refrec__External_ID__c = serviceExtId);
+                        refrec__Service__c newService = new refrec__Service__c();
+                        newService.Name = loc.Name;
+                        newService.refrec__Street__c = loc.address;
+                        newService.refrec__City__c = loc.city;
+                        newService.refrec__Phone__c = phones.size() > 0 ? phones[0].digits : '';
+                        newService.refrec__Zip_Code__c = loc.zip_code;
+                        newService.refrec__External_ID__c = serviceExtId;
+                        newService.refrec__Description__c = oppty.description;
+                        newService.refrec__Type__c = provider_type;
+                        newService.refrec__All_Types__c = provider_type;
+                        newService.refrec__State__c = loc.state.length() > 2 ? '' : OneDegreeHelper.checkNull(loc.state);
+                        newService.refrec__service_tags__c = service_tags;
+                        newService.refrec__situation_tags__c = situation_tags;
+                        newService.refrec__Location__latitude__s = loc.lat;
+                        newService.refrec__Location__longitude__s = loc.long_z;
+                        newService.refrec__Website__c = location_url;
+                        //pass the areas, categories, tags
+                        Set<String> ODFields = OneDegreeHelper.mapSMOneDegreeFields(serviceExtId, oppty.areas, oppty.categories, oppty.tags);
+                        if(ODFields.size() > 0) {
+                            for(String ODField : ODFields) {
+                                System.debug(LoggingLevel.DEBUG, '---> serviceExtId, field ' + serviceExtId+','+ODField);
+                                if(ODField.equals('Home Owner')) {
+                                    newService.refrec__Home_Owner__c = true;
+                                }else if(ODField.equals('Home Renter')) {
+                                    newService.refrec__Home_Renter__c = true;
+                                }else if(ODField.equals('Homeless')) {
+                                    newService.refrec__Homeless__c = true;
+                                }else if(ODField.equals('Near Homeless')) {
+                                    newService.refrec__Near_Homeless__c = true;
+                                }else if(ODField.equals('Runaway')) {
+                                    newService.refrec__Runaway__c = true;
+                                }  else if(ODField.equals('Employed full-time')) {
+                                    newService.refrec__Employed_full_time__c = true;
+                                }else if(ODField.equals('Retired')) {
+                                    newService.refrec__Retired__c = true;
+                                }else if(ODField.equals('Employed part-time')) {
+                                    newService.refrec__Employed_part_time__c = true;
+                                }else if(ODField.equals('Unemployed')) {
+                                    newService.refrec__Unemployed__c = true;
+                                }
+                            }
+                        }
+                        List<Integer> minMaxAge = OneDegreeHelper.getMinMaxAge(serviceExtId, oppty.properties);
+                        System.debug(LoggingLevel.DEBUG, '---> Age recvd - ' + minMaxAge);
+                        if(minMaxAge.size() > 0) {
+                            if(minMaxAge[0] > 0 && minMaxAge[1] > 0) {
+                                //elig-age-or-over
+                                newService.refrec__Minimum_Age__c = minMaxAge[0];
+                                //elig-age-or-under
+                                newService.refrec__Maximum_Age__c = minMaxAge[1];                                
+                            }
+                        }
+
                         //create account reference using account number
                         Account acctReference = new Account(External_ID__c = accountExtId);
                         newService.refrec__Account__r = acctReference;
@@ -113,7 +155,6 @@ public class ServiceProviderClient {
                                             External_ID__c = accountExtId,
                                             description = oppty.description);
                     acctRecords.add(newAcct);
-
                 }// end of oppty loop
     
     
@@ -140,7 +181,7 @@ public class ServiceProviderClient {
         ServiceProviderHelper.insertSObjectRecords(sobjList);        
     }
 
-    @future(callout=true)
+    //@future(callout=true)
     public static void processOneDegreeService(Map<String, String> authParams, Map<string, string> queryParams) {
         oneDegreeServiceController(authParams, queryParams);
     }      

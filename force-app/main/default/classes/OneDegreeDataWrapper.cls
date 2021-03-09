@@ -420,6 +420,8 @@ public class OneDegreeDataWrapper {
 		public String community_disabled {get;set;} // in json: community-disabled
 		public String service_county_california_san_francisco {get;set;} // in json: service-county-california-san-francisco
 		public String ada_accessible {get;set;} // in json: ada-accessible
+		public String elig_age_or_over {get; set;}
+		public String elig_age_or_under {get; set;}
 
 		public Properties(JSONParser parser) {
 			while (parser.nextToken() != System.JSONToken.END_OBJECT) {
@@ -440,6 +442,10 @@ public class OneDegreeDataWrapper {
 							service_county_california_san_francisco = parser.getText();
 						} else if (text == 'ada-accessible') {
 							ada_accessible = parser.getText();
+						} else if (text == 'elig-age-or-over') {
+							elig_age_or_over = parser.getText();
+						} else if (text == 'elig-age-or-under') {
+							elig_age_or_under = parser.getText();
 						} else {
 							System.debug(LoggingLevel.WARN, 'Properties consuming unrecognized property: '+text);
 							consumeObject(parser);

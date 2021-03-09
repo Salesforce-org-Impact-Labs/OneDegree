@@ -238,13 +238,21 @@ public class Test_ServiceProvider {
         	String jobId = MetaDataUtility.upsertMetadata(attributeTags[0]);        
         Test.stopTest();
     }
-    
+	/*    
     @IsTest
     static void testQueueable() {
         OneDegreeServiceQueueable odQueueable = new OneDegreeServiceQueueable();
         Test.startTest();
         Test.setMock(HttpCalloutMock.class, new Test_OneDegreeMockService());
         System.enqueueJob(odQueueable);
+        Test.stopTest();
+    }
+	*/
+    @IsTest
+    static void testBatchable() {
+        Test.startTest();
+        Test.setMock(HttpCalloutMock.class, new Test_OneDegreeMockService());
+        Id batchId = Database.executeBatch(new OneDegreeServiceBatchable(), 1);
         Test.stopTest();
     }
     

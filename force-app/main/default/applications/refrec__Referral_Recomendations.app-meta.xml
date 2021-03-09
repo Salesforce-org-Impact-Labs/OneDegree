@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <brand>
+        <headerColor>#0070D2</headerColor>
+        <logo>refrec__Screen_Shot_20200918_at_30754_PM</logo>
+        <logoVersion>1</logoVersion>
+        <shouldOverrideOrgTheme>false</shouldOverrideOrgTheme>
+    </brand>
+    <formFactors>Small</formFactors>
+    <formFactors>Large</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <label>Service Match</label>
+    <navType>Standard</navType>
+    <subscriberTabs>OD_Zipcode__c</subscriberTabs>
+    <tabs>standard-Contact</tabs>
+    <tabs>refrec__Service__c</tabs>
+    <tabs>refrec__Client_Profile__c</tabs>
+    <tabs>refrec__Referral__c</tabs>
+    <uiType>Lightning</uiType>
+    <utilityBar>refrec__Referral_Recomendations_UtilityBar</utilityBar>
+</CustomApplication>
