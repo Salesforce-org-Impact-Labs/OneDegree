@@ -11,7 +11,11 @@ https://test.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002kr4nAAA
 Production & Developer Edition Orgs:<br/>
 https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002kr4nAAA
 
-## Release Notes (13/09/2021)
+## Release Notes (03/10/2021)
+
+1) All Properties mapped to populate Housing and Employement section criteria's.
+2) Removed old custom metadata types
+## Release Notes (03/09/2021)
 
 1) Properties mapped to populate Housing and Employement section criteria's.
 2) Eligibility of minimum age and maximum age set.
