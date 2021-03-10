@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Home Owner_9</label>
+    <protected>false</protected>
+    <values>
+        <field>OD_Mapped_Values__c</field>
+        <value xsi:type="xsd:string">Legal,Housing law,Tenants rights</value>
+    </values>
+    <values>
+        <field>SM_Field__c</field>
+        <value xsi:type="xsd:string">Home Owner</value>
+    </values>
+</CustomMetadata>
