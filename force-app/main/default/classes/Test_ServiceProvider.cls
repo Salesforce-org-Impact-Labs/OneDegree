@@ -222,33 +222,6 @@ public class Test_ServiceProvider {
 
     
     @IsTest
-    static void testMetadataUtility() {
-        Test.startTest();        
-        	string queryAttributeTag = 'SELECT Id, MasterLabel, DeveloperName, Attribute_Tag__c, Last_Run_Datetime__c, Active__c ' +
-            						'FROM One_Degree_Attribute_Setting__mdt LIMIT 1 ' ;
-        	string jsonAttribute = '[{"DeveloperName":"health clinic","Attribute_Tag__c":"health clinic", "Active__c":"true"}]';
-
-        	Test_CustomMetadataDAO.setMetadata(queryAttributeTag, 
-                                           (List<One_Degree_Attribute_Setting__mdt>) JSON.deserialize(jsonAttribute, List<One_Degree_Attribute_Setting__mdt>.class)
-                                          );
-        	One_Degree_Attribute_Setting__mdt[] attributeTags = new CustomMetaDataDAO().getCustomMetadataRecords(queryAttributeTag);        
-			System.debug(LoggingLevel.DEBUG, '---> attributeTags ' + attributeTags[0]);
-			attributeTags[0].Active__c = true;
-        	attributeTags[0].Last_Run_Datetime__c = System.datetime.now();
-        	String jobId = MetaDataUtility.upsertMetadata(attributeTags[0]);        
-        Test.stopTest();
-    }
-	/*    
-    @IsTest
-    static void testQueueable() {
-        OneDegreeServiceQueueable odQueueable = new OneDegreeServiceQueueable();
-        Test.startTest();
-        Test.setMock(HttpCalloutMock.class, new Test_OneDegreeMockService());
-        System.enqueueJob(odQueueable);
-        Test.stopTest();
-    }
-	*/
-    @IsTest
     static void testBatchable() {
         Test.startTest();
         Test.setMock(HttpCalloutMock.class, new Test_OneDegreeMockService());

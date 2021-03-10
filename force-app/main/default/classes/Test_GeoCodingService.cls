@@ -22,7 +22,7 @@ public class Test_GeoCodingService {
         authSet.put('API_Key__c', abSetting[0].API_Key__c);
         authSet.put('Hostname__c', abSetting[0].Hostname__c);
         
-
+		/*
         string queryZipcode = 'SELECT Id, MasterLabel, DeveloperName, Zipcode__c, Lat__c, Long__c from One_Degree_Zipcode_Search__mdt';
         string jsonZipcode = '[{"DeveloperName": "94043", "Zipcode__c":"94043", "Lat__c" : "37.4062237", "Long__c": "-122.0781663"}]';
         Test_CustomMetadataDAO.setMetadata(queryZipcode, 
@@ -38,7 +38,7 @@ public class Test_GeoCodingService {
             System.debug(LoggingLevel.DEBUG, '---> query url ' + s);
             queryParams.add(s);
         }
-        
+        */
 
 		Test.setMock(HttpCalloutMock.class, new Test_GeoCodingMockService()); 
         GeoCodingService.processGeoCodingService(authSet, queryParams);
