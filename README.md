@@ -4,7 +4,7 @@
 
 One Degree Service Provider
 
-## Release Links (Beta )
+## Release Links (Beta 8)
 # Installation Info
 
 Sandbox & Scratch Orgs:
