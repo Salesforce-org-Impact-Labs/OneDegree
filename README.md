@@ -4,12 +4,19 @@
 
 One Degree Service Provider
 
-## Release Links (Beta 7)
-Sandbox & Scratch Orgs:<br/>
-https://test.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002kr4nAAA
+## Release Links (Beta )
+# Installation Info
 
-Production & Developer Edition Orgs:<br/>
-https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002kr4nAAA
+Sandbox & Scratch Orgs:
+https://test.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002kr52AAA
+
+Production & Developer Edition Orgs:
+https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002kr52AAA
+## Release Notes (04/26/2021)
+
+1) Updated URL in Provider Record
+2) Updated Name to match title from OneDegree
+
 
 ## Release Notes (03/10/2021)
 
