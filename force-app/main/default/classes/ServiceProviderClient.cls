@@ -58,8 +58,8 @@ public class ServiceProviderClient {
                         //get the website URL
                         OneDegreeDataWrapper.Properties website = oppty.properties;
                         string location_url;
-                        if(website.action_signup_url != null) {
-                            location_url = website.action_signup_url;
+                        if(oppty.slug != null) {
+                            location_url = 'https://www.1degree.org/opp/' + oppty.slug;
                         }else{
                             location_url = '';
                         }
@@ -74,7 +74,7 @@ public class ServiceProviderClient {
 
                         refrec__Service__c  serviceReference = new refrec__Service__c(refrec__External_ID__c = serviceExtId);
                         refrec__Service__c newService = new refrec__Service__c();
-                        newService.Name = loc.Name;
+                        newService.Name = oppty.title.left(80);
                         newService.refrec__Street__c = loc.address;
                         newService.refrec__City__c = loc.city;
                         newService.refrec__Phone__c = phones.size() > 0 ? phones[0].digits : '';
