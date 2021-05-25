@@ -1,4 +1,4 @@
-global class OneDegreeServiceBatchable implements 
+global with sharing class OneDegreeServiceBatchable implements 
             Database.Batchable<sObject>, Database.Stateful, Database.AllowsCallouts {
     // instance member to retain state across transactions
     public Integer recordsProcessed = 0; 
