@@ -8,10 +8,15 @@ One Degree Service Provider
 # Installation Info
 
 Sandbox & Scratch Orgs:
-https://test.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002kr52AAA
+https://test.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002kr9YAAQ
 
 Production & Developer Edition Orgs:
-https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002kr52AAA
+https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002kr9YAAQ
+
+## Release Notes (06/01/2021)
+
+1) Updated Batchable class with sharing access modifier.
+
 ## Release Notes (04/26/2021)
 
 1) Updated URL in Provider Record
