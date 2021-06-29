@@ -4,34 +4,20 @@
 
 One Degree Service Provider
 
-## Release Links (Beta 8)
+## Release Links (Beta 10)
 # Installation Info
 
 Sandbox & Scratch Orgs:
-https://test.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002kr9YAAQ
+https://test.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002krHSAAY
 
 Production & Developer Edition Orgs:
-https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002kr9YAAQ
+https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002krHSAAY
 
-## Release Notes (06/01/2021)
+## Release Notes (06/29/2021)
 
-1) Updated Batchable class with sharing access modifier.
-
-## Release Notes (04/26/2021)
-
-1) Updated URL in Provider Record
-2) Updated Name to match title from OneDegree
+1) Removed api keys of One Degree and Google Geo Coding service
 
 
-## Release Notes (03/10/2021)
-
-1) All Properties mapped to populate Housing and Employement section criteria's.
-2) Removed old custom metadata types
-## Release Notes (03/09/2021)
-
-1) Properties mapped to populate Housing and Employement section criteria's.
-2) Eligibility of minimum age and maximum age set.
-3) Batch job to execute long running zipcodes
 
 ## Testing
 [![OneDegree Setup Video]](https://drive.google.com/file/d/1iCykc20FrrTjNRaOKnbIR5RMge4TlBSK/view?usp=sharing)
