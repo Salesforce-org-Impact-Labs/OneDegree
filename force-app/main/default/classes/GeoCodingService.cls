@@ -1,4 +1,4 @@
-public class GeoCodingService {
+public With Sharing class GeoCodingService {
 
     
     private static void geoCodingServiceController(Map<String, String> authParams, String[] queryParams) {
@@ -11,26 +11,29 @@ public class GeoCodingService {
         Map<String, OD_Zipcode__c> zipcodes = new Map<String, OD_Zipcode__c>();
         List<OD_Zipcode__c> zipCodesUpdated = new List<OD_Zipcode__c>();
         
-		List<OD_Zipcode__c> serviceZipCodes = [SELECT Id, Zipcode__c, Latitude__c , Longitude__c
-                                              		FROM OD_Zipcode__c
-                                              		ORDER BY Zipcode__c];
-		for(OD_Zipcode__c serviceZipCode : serviceZipCodes) { 
-            System.debug(LoggingLevel.DEBUG, '---> zipcode ' + serviceZipCode);
-            zipcodes.put(serviceZipCode.Zipcode__c, serviceZipCode);
-        }
+        if (Schema.sObjectType.OD_Zipcode__c.isAccessible()) {
+            List<OD_Zipcode__c> serviceZipCodes = [SELECT Id, Zipcode__c, Latitude__c , Longitude__c
+            FROM OD_Zipcode__c
+            ORDER BY Zipcode__c];
+            for(OD_Zipcode__c serviceZipCode : serviceZipCodes) { 
+                System.debug(LoggingLevel.DEBUG, '---> zipcode ' + serviceZipCode);
+                zipcodes.put(serviceZipCode.Zipcode__c, serviceZipCode);
+            }            
+        }        
+
         
         for(String s : authParams.keySet()) {
             System.debug(LoggingLevel.DEBUG, '---> key ' + s + ', value ' + authParams.get(s));
         }        
 		for(String s : queryParams) {        
             String method = 'GET';
-            String api_key = authParams.get('API_Key__c');
+            String apiKey = authParams.get('API_Key__c');
             String url = s;
             String authString = null;
             String authHeader = null;
             String username = null;
             string pwd = null;
-            geoCodingResults.setServiceParams(api_key, username, pwd, url, method, authString, authHeader);        
+            geoCodingResults.setServiceParams(apiKey, username, pwd, url, method, authString, authHeader);        
             string result = geoCodingResults.getResults('GeoCoding Service'); 
         	System.debug(LoggingLevel.DEBUG, '---> results ' + result);
             
@@ -71,7 +74,10 @@ public class GeoCodingService {
         if(!Test.isRunningTest()) {
         	// update metadata with latitude and longitude
             if(zipCodesUpdated.size() > 0) {
-                update zipCodesUpdated;
+                if (Schema.sObjectType.OD_Zipcode__c.isUpdateable()) {
+                    update zipCodesUpdated;
+                }
+                
             }
         }        
     }
