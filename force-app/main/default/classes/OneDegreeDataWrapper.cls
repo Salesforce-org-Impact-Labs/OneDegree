@@ -304,11 +304,31 @@ public class OneDegreeDataWrapper {
 						} else if (text == 'is_appointment') {
 							is_appointment = parser.getBooleanValue();
 						} else if (text == 'available_on') {
-							available_on = parser.readValueAs(Object.class);
+                            try{
+                                if(parser.readValueAs(Object.class) != null) {
+									available_on = parser.readValueAs(Object.class);
+                                }
+                            }catch(Exception ex) {
+                                System.debug(LoggingLevel.ERROR, '---> Error parsing available_on : ' + ex.getMessage());
+                            }														
+							
 						} else if (text == 'expires_on') {
-							expires_on = parser.readValueAs(Object.class);
+                            try{
+                                if(parser.readValueAs(Object.class) != null) {
+									expires_on = parser.readValueAs(Object.class);
+                                }
+                            }catch(Exception ex) {
+                                System.debug(LoggingLevel.ERROR, '---> Error parsing expires_on : ' + ex.getMessage());
+                            }							
+							
 						} else if (text == 'region') {
-							region = parser.readValueAs(Object.class);
+                            try{
+                                if(parser.readValueAs(Object.class) != null) {
+									region = parser.readValueAs(Object.class);                                                                    
+                                }
+                            }catch(Exception ex) {
+                                System.debug(LoggingLevel.ERROR, '---> Error parsing region : ' + ex.getMessage());
+                            }
 						} else if (text == 'organization') {
 							organization = new Organization(parser);
 						} else if (text == 'resource_type') {
