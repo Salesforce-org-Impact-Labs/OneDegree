@@ -8,18 +8,19 @@ https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002sBOU
 ## Managed Released v1.0
 https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002krPv
 
-## Release Links (Beta 10)
+## Release Links (1.1 Beta 1)
 # Installation Info
 
 Sandbox & Scratch Orgs:
-https://test.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002krHSAAY
+https://test.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002krQAAAY
 
 Production & Developer Edition Orgs:
-https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002krHSAAY
+https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002krQAAAY
 
-## Release Notes (06/29/2021)
+## Release Notes (11/15/2021)
 
-1) Removed api keys of One Degree and Google Geo Coding service
+1) Added sharing permission on Geo Coding Batchable class
+2) Added null verification in One Degree wrapper class
 
 
 
