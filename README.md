@@ -3,6 +3,8 @@
 ![Deploy, Run Apex Tests, Delete Org](https://github.com/Salesforce-org-Impact-Labs/OneDegree/workflows/Deploy,%20Run%20Apex%20Tests,%20Delete%20Org/badge.svg)
 
 One Degree Service Provider
+## Managed Released v1.1 (Nov 15th 2021)
+https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002sBOU
 ## Managed Released v1.0
 https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002krPv
 
