@@ -1,4 +1,4 @@
-global class GeoCodingServiceQueueable implements Queueable, Database.AllowsCallouts {
+global with sharing class GeoCodingServiceQueueable implements Queueable, Database.AllowsCallouts {
 
     Set<String> querySet = new Set<String>();
     Map<String, String> authSet = new Map<String, String>();
@@ -12,7 +12,7 @@ global class GeoCodingServiceQueueable implements Queueable, Database.AllowsCall
     }
     
     global void execute(QueueableContext context) {
-		string queryserviceZipCodes = 'SELECT Id, Zipcode__c, Latitude__c , Longitude__c  FROM OD_Zipcode__c';
+		string queryserviceZipCodes = 'SELECT Id, Zipcode__c, Latitude__c , Longitude__c  FROM OD_Zipcode__c LIMIT 50000';
 		List<OD_Zipcode__c> serviceZipCodes = [SELECT Id, Zipcode__c, Latitude__c , Longitude__c  FROM OD_Zipcode__c];
 
         for(OD_Zipcode__c serviceZipCode : serviceZipCodes) {

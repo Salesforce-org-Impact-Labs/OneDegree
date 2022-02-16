@@ -14,7 +14,9 @@ public With Sharing class GeoCodingService {
         if (Schema.sObjectType.OD_Zipcode__c.isAccessible()) {
             List<OD_Zipcode__c> serviceZipCodes = [SELECT Id, Zipcode__c, Latitude__c , Longitude__c
             FROM OD_Zipcode__c
-            ORDER BY Zipcode__c];
+            ORDER BY Zipcode__c
+			LIMIT 50000];
+            
             for(OD_Zipcode__c serviceZipCode : serviceZipCodes) { 
                 System.debug(LoggingLevel.DEBUG, '---> zipcode ' + serviceZipCode);
                 zipcodes.put(serviceZipCode.Zipcode__c, serviceZipCode);
@@ -38,6 +40,19 @@ public With Sharing class GeoCodingService {
         	System.debug(LoggingLevel.DEBUG, '---> results ' + result);
             
             try{
+                
+        		Map<String, String> objectName = new Map<String, String>();
+				Map<String, String> fields = new Map<String, String>();
+        		fields.put('Latitude__c', 'isUpdateable');
+        		fields.put('Longitude__c', 'isUpdateable');
+        		fields.put('Id', 'isUpdateable');                
+        		objectName.put('OD_Zipcode__c', 'isUpdateable');
+        		Boolean securityResult = SecurityWrapperController.objectAccessible(objectName, fields); 
+                if(!securityResult) {
+                    System.debug(LoggingLevel.ERROR, '---> Error in object and FLS in OD_Zipcode__c');
+                }
+                
+                
 				GeoCodingDataWrapper geoCodeObject = GeoCodingDataWrapper.parse(result);  
                 List<GeoCodingDataWrapper.results> geoResults =  geoCodeObject.results;
                 for(GeoCodingDataWrapper.results geoResult : geoResults) {

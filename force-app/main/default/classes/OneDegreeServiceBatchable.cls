@@ -83,6 +83,18 @@ global with sharing class OneDegreeServiceBatchable implements
             TotalJobItems, CreatedBy.Email
             FROM AsyncApexJob
             WHERE Id = :bc.getJobId()];
+        
+        Map<String, String> objectName = new Map<String, String>();
+		Map<String, String> fields = new Map<String, String>();
+        fields.put('Job_StartDate__c', 'isCreatable');
+        fields.put('Job_EndDate__c', 'isCreatable');
+        objectName.put('OD_Search_Area__c', 'isCreatable');
+        Boolean result = SecurityWrapperController.objectAccessible(objectName, fields);
+        if(!result) {
+            System.debug(LoggingLevel.ERROR, '---> Problem with object and FLS in OD_Search_Area__c');
+            return;
+        }
+        
         for(Id recordId : logJobTimes.keySet()) {
             List<Datetime> jobTimes = logJobTimes.get(recordId);
             System.debug(LoggingLevel.DEBUG, '---> Id ' + recordId);
