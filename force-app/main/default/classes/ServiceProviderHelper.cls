@@ -31,6 +31,17 @@ public class ServiceProviderHelper {
 
     public static void updateServiceProviderRecords(Map<Id, refrec__Service__c> updateServiceRecords) {
         List<refrec__Service__c> updatedSvcrecords = new List<refrec__Service__c>();
+        //check for object and FLS permission
+        Map<String, String> objectName = new Map<String, String>();
+		Map<String, String> fields = new Map<String, String>();
+        fields.put('Id', 'isUpdateable');
+        objectName.put('refrec__Service__c', 'isUpdateable');
+        Boolean securityResult = SecurityWrapperController.objectAccessible(objectName, fields); 
+        if(!securityResult) {
+			System.debug(LoggingLevel.ERROR, '---> Error in object and FLS in refrec__Service__c');
+			return;            
+        }
+        
         for(Id svcId : updateServiceRecords.keySet()) {
             refrec__Service__c svc = updateServiceRecords.get(svcId);
             svc.Id = svcId;
@@ -68,6 +79,19 @@ public class ServiceProviderHelper {
         List<refrec__Open_Hours__c> openHourRecords = [SELECT Id 
                                                        	FROM refrec__Open_Hours__c 
                                                        	WHERE refrec__Service__c IN :serviceIds];
+        
+
+        //check for object and FLS permission
+        Map<String, String> objectName = new Map<String, String>();
+        Map<String, String> fields = new Map<String, String>();
+        objectName.put('refrec__Open_Hours__c', 'isDeletable');
+        Boolean securityResult = SecurityWrapperController.objectAccessible(objectName, fields);        
+
+        if(!securityResult) {
+			System.debug(LoggingLevel.ERROR, '---> Error in object and FLS in refrec__Open_Hours__c');
+            return;
+        }
+        
         if(openHourRecords.size() > 0) {
             delete openHourRecords;
         }

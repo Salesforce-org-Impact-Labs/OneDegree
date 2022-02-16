@@ -35,6 +35,59 @@ public class ServiceProviderClient {
             //system.debug(LoggingLevel.DEBUG, '---> od query results : ' + odQueryResult); 
             
             try{
+                    //check for object and FLS permission on account
+                    Map<String, String> accountobjectName = new Map<String, String>();
+                    Map<String, String> accountfields = new Map<String, String>();
+                    accountfields.put('Name', 'isCreatable');
+                    accountfields.put('External_ID__c', 'isCreatable');
+                    accountfields.put('description', 'isCreatable');                    
+                    accountobjectName.put('Account', 'isCreatable');
+                    Boolean acctsecurityResult = SecurityWrapperController.objectAccessible(accountobjectName, accountfields);
+                    if(!acctsecurityResult) {
+						System.debug(LoggingLevel.ERROR, '---> Error in object and FLS in Account');                        
+                        return;
+                    }                
+                
+				//check for object and FLS permission on refrec
+                Map<String, String> refrecobjectName = new Map<String, String>();
+                Map<String, String> refrecfields = new Map<String, String>();
+                refrecfields.put('Name', 'isCreatable');
+                refrecfields.put('refrec__Street__c', 'isCreatable');
+				refrecfields.put('refrec__City__c', 'isCreatable');                    
+                refrecfields.put('refrec__Phone__c', 'isCreatable');
+                refrecfields.put('refrec__Zip_Code__c', 'isCreatable');
+				refrecfields.put('refrec__External_ID__c', 'isCreatable');                    
+                refrecfields.put('refrec__Description__c', 'isCreatable');
+                refrecfields.put('refrec__Type__c', 'isCreatable');
+				refrecfields.put('refrec__All_Types__c', 'isCreatable');                    
+                refrecfields.put('refrec__State__c', 'isCreatable');
+                refrecfields.put('refrec__service_tags__c', 'isCreatable');
+				refrecfields.put('refrec__situation_tags__c', 'isCreatable');                    
+                refrecfields.put('refrec__Location__latitude__s', 'isCreatable');
+                refrecfields.put('refrec__Location__longitude__s', 'isCreatable');
+				refrecfields.put('refrec__Website__c', 'isCreatable');                                    
+                refrecfields.put('refrec__Home_Owner__c', 'isCreatable');
+				refrecfields.put('refrec__Home_Renter__c', 'isCreatable');                    
+                refrecfields.put('refrec__Homeless__c', 'isCreatable');
+                refrecfields.put('refrec__Near_Homeless__c', 'isCreatable');
+				refrecfields.put('refrec__Runaway__c', 'isCreatable');                    
+                refrecfields.put('refrec__Employed_full_time__c', 'isCreatable');
+                refrecfields.put('refrec__Retired__c', 'isCreatable');
+				refrecfields.put('refrec__Employed_part_time__c', 'isCreatable');                                                    
+				refrecfields.put('refrec__Unemployed__c', 'isCreatable');
+				refrecfields.put('refrec__Minimum_Age__c', 'isCreatable');                                                    
+				refrecfields.put('refrec__Maximum_Age__c', 'isCreatable');
+				refrecfields.put('refrec__Account__r', 'isCreatable');
+                
+                refrecobjectName.put('refrec__Service__c', 'isCreatable');
+                
+                Boolean securityResult = SecurityWrapperController.objectAccessible(refrecobjectName, refrecfields);
+                if(!securityResult) {
+					System.debug(LoggingLevel.ERROR, '---> Error in object and FLS in refrec__Service__c');                        
+                    return;
+                }                
+                
+                
                 String serviceExtId;
                 String accountExtId;
                 Integer counter = 0;
@@ -151,6 +204,9 @@ public class ServiceProviderClient {
 
                     }// end of locations
                     //create the account record.
+
+
+                    
                     Account newAcct = new Account(name = org.name, 
                                             External_ID__c = accountExtId,
                                             description = oppty.description);

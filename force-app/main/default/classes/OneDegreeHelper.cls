@@ -29,6 +29,18 @@ public class OneDegreeHelper {
 
     public static List<refrec__Open_Hours__c> oneDegreeGetOpenHours(OneDegreeDataWrapper.Schedule sched, string service_external_id) {
         List<refrec__Open_Hours__c> ohs = new List<refrec__Open_Hours__c>();
+        
+        //check for object and FLS permission
+        Map<String, String> objectName = new Map<String, String>();
+        Map<String, String> fields = new Map<String, String>();
+        fields.put('refrec__External_ID__c', 'isCreatable');
+        objectName.put('refrec__Service__c', 'isCreatable');
+        Boolean securityResult = SecurityWrapperController.objectAccessible(objectName, fields); 
+        if(!securityResult) {
+			System.debug(LoggingLevel.ERROR, '---> Error in object and FLS in refrec__Service__c');            
+            return null;
+        }
+        
         refrec__Service__c  serviceReference = new refrec__Service__c(refrec__External_ID__c = String.valueOf(service_external_id));
         // all 7 days of the week.
         //monday
