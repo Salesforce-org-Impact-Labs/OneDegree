@@ -12,9 +12,11 @@ public class SecurityWrapperController {
         String sObjectName;
         String permissionType;
         String fieldPermissionType;
+        Map<String, String> npFields = new Map<String, String>();
+        
         // Get the object name and permission type
         for(String sName : objectName.keySet()) {
-            sObjectName = sName;
+            sObjectName = getOrgNamespace() + sName;
         }
         for(String sPermission : objectName.values()) {
             permissionType = sPermission;
@@ -50,6 +52,11 @@ public class SecurityWrapperController {
             }            
         }        
         
+        //copy the map with namespace
+        for(String fieldname : fields.keyset()) {
+            String perm = fields.get(fieldname);
+			npFields.put(getOrgNamespace() + fieldname, perm);
+        }
         for(String fieldPermission : fields.values()) {
 			fieldPermissionType = fieldPermission;
             //one loop is fine to the permission type
@@ -63,7 +70,7 @@ public class SecurityWrapperController {
 		    Schema.SObjectField objectField = objectFieldsMap.get(objectFieldKey);
     		// * Getting the current sobject field description (field metadata) from sobject field
     		Schema.DescribeFieldResult objectFieldResult = objectField.getDescribe();
-            if(fields.containsKey(objectFieldResult.getName())) {
+            if(npFields.containsKey(objectFieldResult.getName())) {
                 
                 if(fieldPermissionType.equals(ISACCESSIBLE_TYPE)) {
                     System.debug(objectFieldResult.isAccessible());
@@ -93,4 +100,22 @@ public class SecurityWrapperController {
         return result;
     }
 
+    private static String getOrgNamespace() {
+		String ORG_NAMESPACE = '';
+        try{
+            List<Organization> np = [SELECT NamespacePrefix FROM Organization];
+            for(Organization org_np : np) {
+                System.debug('---> np ' + org_np.NamespacePrefix);
+                if(org_np.NamespacePrefix.equals('svc_onedegree')) {
+                    ORG_NAMESPACE = org_np.NamespacePrefix + '__';
+                    break;
+                }
+            }
+        }catch(Exception ex) {
+            System.debug(LoggingLevel.ERROR, '---> Error getting namespace ' + ex.getMessage());
+        }        
+        
+        return ORG_NAMESPACE;
+        
+    }
 }
