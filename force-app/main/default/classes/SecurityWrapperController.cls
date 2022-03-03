@@ -105,8 +105,8 @@ public class SecurityWrapperController {
         try{
             List<Organization> np = [SELECT NamespacePrefix FROM Organization];
             for(Organization org_np : np) {
-                System.debug('---> np ' + org_np.NamespacePrefix);
-                if(org_np.NamespacePrefix.equals('svc_onedegree')) {
+                if(org_np.NamespacePrefix!= null && org_np.NamespacePrefix.equals('svc_onedegree')) {
+                	System.debug('---> np ' + org_np.NamespacePrefix);
                     ORG_NAMESPACE = org_np.NamespacePrefix + '__';
                     break;
                 }

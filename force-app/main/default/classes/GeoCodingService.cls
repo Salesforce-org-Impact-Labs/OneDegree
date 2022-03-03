@@ -26,7 +26,19 @@ public With Sharing class GeoCodingService {
         
         for(String s : authParams.keySet()) {
             System.debug(LoggingLevel.DEBUG, '---> key ' + s + ', value ' + authParams.get(s));
-        }        
+        } 
+        //check for permission and return if neccessary
+		Map<String, String> objectName = new Map<String, String>();
+		Map<String, String> fields = new Map<String, String>();
+        fields.put('Latitude__c', 'isUpdateable');
+        fields.put('Longitude__c', 'isUpdateable');
+        objectName.put('OD_Zipcode__c', 'isUpdateable');
+        Boolean securityResult = SecurityWrapperController.objectAccessible(objectName, fields); 
+        if(!securityResult) {
+        	System.debug(LoggingLevel.ERROR, '---> Error in object and FLS in OD_Zipcode__c');
+            return;
+        }
+        
 		for(String s : queryParams) {        
             String method = 'GET';
             String apiKey = authParams.get('API_Key__c');
@@ -40,19 +52,6 @@ public With Sharing class GeoCodingService {
         	System.debug(LoggingLevel.DEBUG, '---> results ' + result);
             
             try{
-                
-        		Map<String, String> objectName = new Map<String, String>();
-				Map<String, String> fields = new Map<String, String>();
-        		fields.put('Latitude__c', 'isUpdateable');
-        		fields.put('Longitude__c', 'isUpdateable');
-        		fields.put('Id', 'isUpdateable');                
-        		objectName.put('OD_Zipcode__c', 'isUpdateable');
-        		Boolean securityResult = SecurityWrapperController.objectAccessible(objectName, fields); 
-                if(!securityResult) {
-                    System.debug(LoggingLevel.ERROR, '---> Error in object and FLS in OD_Zipcode__c');
-                }
-                
-                
 				GeoCodingDataWrapper geoCodeObject = GeoCodingDataWrapper.parse(result);  
                 List<GeoCodingDataWrapper.results> geoResults =  geoCodeObject.results;
                 for(GeoCodingDataWrapper.results geoResult : geoResults) {
@@ -89,10 +88,7 @@ public With Sharing class GeoCodingService {
         if(!Test.isRunningTest()) {
         	// update metadata with latitude and longitude
             if(zipCodesUpdated.size() > 0) {
-                if (Schema.sObjectType.OD_Zipcode__c.isUpdateable()) {
-                    update zipCodesUpdated;
-                }
-                
+            	update zipCodesUpdated;
             }
         }        
     }
