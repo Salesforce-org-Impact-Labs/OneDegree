@@ -13,10 +13,17 @@ public class SecurityWrapperController {
         String permissionType;
         String fieldPermissionType;
         Map<String, String> npFields = new Map<String, String>();
+        String ORG_NP = '';
+        ORG_NP = getOrgNamespace();
         
         // Get the object name and permission type
         for(String sName : objectName.keySet()) {
-            sObjectName = getOrgNamespace() + sName;
+            if(!sName.contains('refrec__')) {
+                sObjectName = ORG_NP + sName;
+            }else {
+				sObjectName = sName;                
+            }
+            
         }
         for(String sPermission : objectName.values()) {
             permissionType = sPermission;
@@ -55,7 +62,12 @@ public class SecurityWrapperController {
         //copy the map with namespace
         for(String fieldname : fields.keyset()) {
             String perm = fields.get(fieldname);
-			npFields.put(getOrgNamespace() + fieldname, perm);
+            if(!fieldname.contains('refrec__')) {
+				npFields.put(ORG_NP + fieldname, perm);                
+            }else{
+				npFields.put(fieldname, perm);                
+            }
+
         }
         for(String fieldPermission : fields.values()) {
 			fieldPermissionType = fieldPermission;
@@ -103,9 +115,11 @@ public class SecurityWrapperController {
     private static String getOrgNamespace() {
 		String ORG_NAMESPACE = '';
         try{
-            List<Organization> np = [SELECT NamespacePrefix FROM Organization];
-            for(Organization org_np : np) {
-                if(org_np.NamespacePrefix!= null && org_np.NamespacePrefix.equals('svc_onedegree')) {
+            List<ApexClass> np = [select NamespacePrefix
+									    FROM ApexClass
+										WHERE Name = 'SecurityWrapperController'];
+            for(ApexClass org_np : np) {
+                if(org_np.NamespacePrefix != null && org_np.NamespacePrefix.equals('svc_onedegree')) {
                 	System.debug('---> np ' + org_np.NamespacePrefix);
                     ORG_NAMESPACE = org_np.NamespacePrefix + '__';
                     break;
