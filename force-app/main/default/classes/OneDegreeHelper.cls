@@ -1,7 +1,10 @@
 public class OneDegreeHelper {
 
+    static string INIT_VECTOR = 'Example of IV123';
+    static Blob initVector = Blob.valueOf(INIT_VECTOR);
+	static Blob key = Blob.valueof(INIT_VECTOR);
     public OneDegreeHelper() {
-
+		key = Crypto.generateAesKey(128);    
     }
     
     public static string checkNull(String value) {
@@ -218,5 +221,27 @@ public class OneDegreeHelper {
         }        
         System.debug(LoggingLevel.DEBUG, '---> Age ' + serviceId + ',' + minMaxAge[0] + ',' + minMaxAge[1]);
         return minMaxAge;
+    }
+    
+    public static string oneDegreeEncrypt(string param) {
+		Blob data = Blob.valueOf(param);
+		Blob encrypted = Crypto.encrypt('AES128', key, initVector, data); 
+        String returnVal = EncodingUtil.base64Encode(encrypted);
+		return returnVal;        
+    }
+    
+    public static string oneDegreeDecrypt(string encrypted) {
+        String decryptedString = '';        
+        try{
+            System.debug(encrypted);
+            Blob encryptedValue = EncodingUtil.base64Decode(encrypted);
+            Blob decrypted = Crypto.decrypt('AES128', key, initVector, encryptedValue);
+ 			decryptedString = decrypted.toString();
+            
+        }catch(Exception ex) {
+            System.debug(LoggingLevel.ERROR, 'Error decrypting string ' + ex.getMessage());
+        }
+		return decryptedString;            
+		//System.assertEquals('1234abcd', decryptedString);        
     }
 }

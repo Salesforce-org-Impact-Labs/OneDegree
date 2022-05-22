@@ -3,5 +3,5 @@
     <description>API settings for Geo Coding Service</description>
     <label>Geo Coding Auth Setting</label>
     <pluralLabel>Geo Coding Auth Settings</pluralLabel>
-    <visibility>Public</visibility>
+    <visibility>PackageProtected</visibility>
 </CustomObject>
