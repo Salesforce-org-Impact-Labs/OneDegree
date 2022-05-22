@@ -16,15 +16,16 @@ public class ServiceProviderClient {
         ServiceResults oneDegreeResults = spFactoryResults.getServiceProviderResults('OnedegreeResults');
 
         for(String s : authParams.keySet()) {
-            System.debug(LoggingLevel.DEBUG, '---> key ' + s + ', value ' + authParams.get(s));
+            //System.debug(LoggingLevel.DEBUG, '---> key ' + s + ', value ' + authParams.get(s));
         }
         for(String s : queryParams.keySet()) {
-            System.debug(LoggingLevel.DEBUG,  'value ' + s);
+            //System.debug(LoggingLevel.DEBUG,  'value ' + s);
 			string provider_type = queryParams.get(s);
 
             String method = 'GET';
             // string odQuery = EncodingUtil.urlEncode('health clinic', 'UTF-8');
             String api_key = authParams.get('API_Key__c');
+            
             String url = s;
             String authString = null;
             String authHeader = null;
@@ -44,7 +45,7 @@ public class ServiceProviderClient {
                     accountobjectName.put('Account', 'isCreatable');
                     Boolean acctsecurityResult = SecurityWrapperController.objectAccessible(accountobjectName, accountfields);
                     if(!acctsecurityResult) {
-						System.debug(LoggingLevel.ERROR, '---> Error in object and FLS in Account');                        
+						//System.debug(LoggingLevel.ERROR, '---> Error in object and FLS in Account');                        
                         return;
                     }                
                 
@@ -83,7 +84,7 @@ public class ServiceProviderClient {
                 
                 Boolean securityResult = SecurityWrapperController.objectAccessible(refrecobjectName, refrecfields);
                 if(!securityResult) {
-					System.debug(LoggingLevel.ERROR, '---> Error in object and FLS in refrec__Service__c');                        
+					//System.debug(LoggingLevel.ERROR, '---> Error in object and FLS in refrec__Service__c');                        
                     return;
                 }                
                 
@@ -93,7 +94,7 @@ public class ServiceProviderClient {
                 Integer counter = 0;
                 OneDegreeDataWrapper odObject = OneDegreeDataWrapper.parse(odQueryResult);
                 List<OneDegreeDataWrapper.Opportunities> opportunities = odObject.opportunities;
-                System.debug(LoggingLevel.DEBUG, 'total # of opptys ' + opportunities.size());
+                //System.debug(LoggingLevel.DEBUG, 'total # of opptys ' + opportunities.size());
                 for(OneDegreeDataWrapper.Opportunities oppty : opportunities) {
                     //System.debug(LoggingLevel.DEBUG, '---> oppty id ' + oppty.id);
                     OneDegreeDataWrapper.Organization org = oppty.organization;
@@ -118,7 +119,7 @@ public class ServiceProviderClient {
                         }
                         serviceExtId = String.valueOf(oppty.id + '-' + org.id+'-'+loc.id);
                         accountExtId = String.valueOf(oppty.id + '-' + org.id);
-                        System.debug(LoggingLevel.DEBUG, counter++ + '.)' + serviceExtId);
+                        //System.debug(LoggingLevel.DEBUG, counter++ + '.)' + serviceExtId);
                         
                         string service_tags = ServiceProviderHelper.getStringValues(oppty.tags);
                         string situation_tags = ServiceProviderHelper.getStringValues(oppty.categories);
@@ -146,7 +147,7 @@ public class ServiceProviderClient {
                         Set<String> ODFields = OneDegreeHelper.mapSMOneDegreeFields(serviceExtId, oppty.areas, oppty.categories, oppty.tags);
                         if(ODFields.size() > 0) {
                             for(String ODField : ODFields) {
-                                System.debug(LoggingLevel.DEBUG, '---> serviceExtId, field ' + serviceExtId+','+ODField);
+                                //System.debug(LoggingLevel.DEBUG, '---> serviceExtId, field ' + serviceExtId+','+ODField);
                                 if(ODField.equals('Home Owner')) {
                                     newService.refrec__Home_Owner__c = true;
                                 }else if(ODField.equals('Home Renter')) {
@@ -169,7 +170,7 @@ public class ServiceProviderClient {
                             }
                         }
                         List<Integer> minMaxAge = OneDegreeHelper.getMinMaxAge(serviceExtId, oppty.properties);
-                        System.debug(LoggingLevel.DEBUG, '---> Age recvd - ' + minMaxAge);
+                        //System.debug(LoggingLevel.DEBUG, '---> Age recvd - ' + minMaxAge);
                         if(minMaxAge.size() > 0) {
                             if(minMaxAge[0] > 0 && minMaxAge[1] > 0) {
                                 //elig-age-or-over
@@ -216,12 +217,12 @@ public class ServiceProviderClient {
     
 
             }catch(Exception ex) {
-                System.debug(LoggingLevel.ERROR, '---> Exception ' + ex.getMessage() + ', line #' + ex.getLineNumber());
+                //System.debug(LoggingLevel.ERROR, '---> Exception ' + ex.getMessage() + ', line #' + ex.getLineNumber());
             }
         } //end of main query loop
-        System.debug(LoggingLevel.DEBUG, '---> account records ' + acctRecords.size());
-        System.debug(LoggingLevel.DEBUG, '---> service records ' + serviceRecords.size());
-        System.debug(LoggingLevel.DEBUG, '---> open hours records ' + openhourRecords.size());
+        //System.debug(LoggingLevel.DEBUG, '---> account records ' + acctRecords.size());
+        //System.debug(LoggingLevel.DEBUG, '---> service records ' + serviceRecords.size());
+        //System.debug(LoggingLevel.DEBUG, '---> open hours records ' + openhourRecords.size());
         // update strategy
         if(updateServiceRecords.size() > 0) {
             // delete all open hours child records and reinsert them

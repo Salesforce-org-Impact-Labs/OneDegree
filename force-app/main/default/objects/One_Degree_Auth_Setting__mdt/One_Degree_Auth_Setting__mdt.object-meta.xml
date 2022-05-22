@@ -3,5 +3,5 @@
     <description>This will store the API Key and Hostname for one degree service provider.</description>
     <label>One Degree Auth Setting</label>
     <pluralLabel>One Degree Auth Settings</pluralLabel>
-    <visibility>Public</visibility>
+    <visibility>PackageProtected</visibility>
 </CustomObject>

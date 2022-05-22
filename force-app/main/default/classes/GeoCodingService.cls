@@ -18,14 +18,14 @@ public With Sharing class GeoCodingService {
 			LIMIT 50000];
             
             for(OD_Zipcode__c serviceZipCode : serviceZipCodes) { 
-                System.debug(LoggingLevel.DEBUG, '---> zipcode ' + serviceZipCode);
+                //System.debug(LoggingLevel.DEBUG, '---> zipcode ' + serviceZipCode);
                 zipcodes.put(serviceZipCode.Zipcode__c, serviceZipCode);
             }            
         }        
 
         
         for(String s : authParams.keySet()) {
-            System.debug(LoggingLevel.DEBUG, '---> key ' + s + ', value ' + authParams.get(s));
+            //System.debug(LoggingLevel.DEBUG, '---> key ' + s + ', value ' + authParams.get(s));
         } 
         //check for permission and return if neccessary
 		Map<String, String> objectName = new Map<String, String>();
@@ -35,37 +35,41 @@ public With Sharing class GeoCodingService {
         objectName.put('OD_Zipcode__c', 'isUpdateable');
         Boolean securityResult = SecurityWrapperController.objectAccessible(objectName, fields); 
         if(!securityResult) {
-        	System.debug(LoggingLevel.ERROR, '---> Error in object and FLS in OD_Zipcode__c');
+        	//System.debug(LoggingLevel.ERROR, '---> Error in object and FLS in OD_Zipcode__c');
             return;
         }
         
 		for(String s : queryParams) {        
             String method = 'GET';
-            String apiKey = authParams.get('API_Key__c');
-            String url = s;
+            System.debug(LoggingLevel.DEBUG, '---> encrypted api key : ' + authParams.get('API_Key__c'));
+            string decryptedAPIKey = OneDegreeHelper.oneDegreeDecrypt(authParams.get('API_Key__c'));
+            String apiKey = decryptedAPIKey;
+            system.debug(LoggingLevel.DEBUG, ' decrypted api key ' + apiKey);
+            String finalUrl = s.replace(authParams.get('API_Key__c'), decryptedAPIKey);
+            String url = finalUrl;
             String authString = null;
             String authHeader = null;
             String username = null;
             string pwd = null;
             geoCodingResults.setServiceParams(apiKey, username, pwd, url, method, authString, authHeader);        
             string result = geoCodingResults.getResults('GeoCoding Service'); 
-        	System.debug(LoggingLevel.DEBUG, '---> results ' + result);
+        	//System.debug(LoggingLevel.DEBUG, '---> results ' + result);
             
             try{
 				GeoCodingDataWrapper geoCodeObject = GeoCodingDataWrapper.parse(result);  
                 List<GeoCodingDataWrapper.results> geoResults =  geoCodeObject.results;
                 for(GeoCodingDataWrapper.results geoResult : geoResults) {
                     GeoCodingDataWrapper.Northeast loc = geoResult.geometry.location;
-                    System.debug('geoResult.geometry location : ' + geoResult.geometry.location);
-                    System.debug('geoResult.geometry lat : ' + loc.lat);
-                    System.debug('geoResult.geometry long : ' + loc.lng);
+                    //System.debug('geoResult.geometry location : ' + geoResult.geometry.location);
+                    //System.debug('geoResult.geometry lat : ' + loc.lat);
+                    //System.debug('geoResult.geometry long : ' + loc.lng);
                     List<GeoCodingDataWrapper.Address_components> addrComponents = geoResult.address_components;
                     for(GeoCodingDataWrapper.Address_components addrComponent : addrComponents) {
 						List<String> types = addrComponent.types;
                         for(String type : types) {
-                            System.debug(LoggingLevel.DEBUG, '---> type ' + type);
+                            //System.debug(LoggingLevel.DEBUG, '---> type ' + type);
                             if(type.equals('postal_code')) {
-                                System.debug(LoggingLevel.DEBUG, '---> postal code ' + addrComponent.long_name);
+                                //System.debug(LoggingLevel.DEBUG, '---> postal code ' + addrComponent.long_name);
                                 
                                 if(zipcodes.containsKey(addrComponent.long_name)) {
 									OD_Zipcode__c zipcodeObject = zipcodes.get(addrComponent.long_name);
@@ -80,7 +84,7 @@ public With Sharing class GeoCodingService {
                     }
                 }
             }catch(Exception ex) {
-                System.debug(LoggingLevel.ERROR, '---> Exception ' + ex.getMessage() + ', Line # ' + ex.getLineNumber());
+                //System.debug(LoggingLevel.ERROR, '---> Exception ' + ex.getMessage() + ', Line # ' + ex.getLineNumber());
             }
         }
         
