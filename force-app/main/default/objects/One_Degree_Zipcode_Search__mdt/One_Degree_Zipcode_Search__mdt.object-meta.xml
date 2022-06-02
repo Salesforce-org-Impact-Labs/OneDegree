@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>DO NOT USE</description>
+    <label>One Degree Zipcode Search</label>
+    <pluralLabel>One Degree Zipcode Search</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>
