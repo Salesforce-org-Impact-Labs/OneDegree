@@ -41,10 +41,8 @@ public With Sharing class GeoCodingService {
         
 		for(String s : queryParams) {        
             String method = 'GET';
-            System.debug(LoggingLevel.DEBUG, '---> encrypted api key : ' + authParams.get('API_Key__c'));
             string decryptedAPIKey = OneDegreeHelper.oneDegreeDecrypt(authParams.get('API_Key__c'));
             String apiKey = decryptedAPIKey;
-            system.debug(LoggingLevel.DEBUG, ' decrypted api key ' + apiKey);
             String finalUrl = s.replace(authParams.get('API_Key__c'), decryptedAPIKey);
             String url = finalUrl;
             String authString = null;

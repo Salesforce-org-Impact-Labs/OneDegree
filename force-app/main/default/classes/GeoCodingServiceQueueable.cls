@@ -18,7 +18,6 @@ global with sharing class GeoCodingServiceQueueable implements Queueable, Databa
 		List<OD_Zipcode__c> serviceZipCodes = [SELECT Id, Zipcode__c, Latitude__c , Longitude__c  FROM OD_Zipcode__c];
 
         for(OD_Zipcode__c serviceZipCode : serviceZipCodes) {
-            System.debug(LoggingLevel.DEBUG, '---> encrypted API Key in Queueable Job ' + encryptedApiKey);
             String query = authSet.get('Hostname__c') + '?address=' + serviceZipCode.Zipcode__c + '&key=' + encryptedApiKey;
             querySet.add(query);
         }
