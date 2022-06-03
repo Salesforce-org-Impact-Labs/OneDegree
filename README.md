@@ -2,30 +2,7 @@
 
 ![Deploy, Run Apex Tests, Delete Org](https://github.com/Salesforce-org-Impact-Labs/OneDegree/workflows/Deploy,%20Run%20Apex%20Tests,%20Delete%20Org/badge.svg)
 
-One Degree Service Provider
-## Managed Released vSpring 23 v1.4 (Mar 4 2022)
-https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002sBWt
-
-
-## Release Links (1.4 (Beta 1))
-# Installation Info
-
-Sandbox & Scratch Orgs:
-https://test.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002sBWo
-
-Production & Developer Edition Orgs:
-https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002sBWo
-
-## Release Links (1.2 (Beta 1))
-# Installation Info
-
-Sandbox & Scratch Orgs:
-https://test.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002sBOZAA2
-
-Production & Developer Edition Orgs:
-https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002sBOZAA2
-
-
+## Please refer to the release section to get the latest installation link.
 
 
 ## Testing
@@ -33,7 +10,8 @@ https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002sBOZAA
 ### Step 1
   Populate respective api keys in custom metadata<br/> "Geo Coding Auth Setting" and "One Degree Auth Setting"
 ### Step 2
-  Create zipcodes and relevant search records for each zipcode in OD Zipcodes object
+  Create zipcodes and relevant search records for each zipcode in OD Zipcodes object.
+  NOTE: In the related list of Zipcode, there is "Start Date" and "End Date", they are automatically populated by batch job. If you run another batch in less than 24 hours for the same zipcode for the items, it will skip the zipcodes, either you have to clear the Dates or add new items for the batch to pick up.
 ### Step 3
   Execute the geo coding service in developer console:<br/>
     svc_onedegree.GeoCodingServiceQueueable geo_svc = new svc_onedegree.GeoCodingServiceQueueable();
