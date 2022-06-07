@@ -1,6 +1,6 @@
-public with sharing class UpsertAPIKeys {
+global class UpsertAPIKeys {
     @AuraEnabled    
-    public static String upsertAPIKeysOnSave(String googleAPIKey, String  oneDegreeAPIKey) {
+    global static String upsertAPIKeysOnSave(String googleAPIKey, String  oneDegreeAPIKey) {
         String result = 'Submitted';
 
         List<One_Degree_API_Key__mdt> apiKeysList = new List<One_Degree_API_Key__mdt>();        
