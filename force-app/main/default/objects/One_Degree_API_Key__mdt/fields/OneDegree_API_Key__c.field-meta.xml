@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>OneDegree_API_Key__c</fullName>
+    <caseSensitive>false</caseSensitive>
+    <description>Insert OneDegree API Key here</description>
+    <externalId>false</externalId>
+    <fieldManageability>SubscriberControlled</fieldManageability>
+    <inlineHelpText>Insert OneDegree API Key here</inlineHelpText>
+    <label>OneDegree API Key</label>
+    <length>255</length>
+    <required>true</required>
+    <type>Text</type>
+    <unique>true</unique>
+</CustomField>

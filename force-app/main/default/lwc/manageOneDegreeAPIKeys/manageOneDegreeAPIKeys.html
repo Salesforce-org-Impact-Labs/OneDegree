@@ -1,0 +1,40 @@
+<template>
+        <div class="slds-var-p-bottom_large slds-var-p-left_large" style="width:500px">
+            <lightning-card  title="API Keys" icon-name="custom:custom63">
+
+                <div class="slds-var-p-around_medium lgc-bg">
+                    <lightning-input 
+                        type="password" 
+                        label="Google Maps API Key" 
+                        placeholder="insert google maps api key..." 
+                        onchange={handleGoogleAPIKeyChange}
+                        required>
+                    </lightning-input>
+                </div>
+
+                <div class="slds-var-p-around_medium lgc-bg">
+                    <lightning-input 
+                        type="password" 
+                        label="OneDegree API Key" 
+                        placeholder="insert one degree api key..." 
+                        onchange={handleODAPIKeyChange}
+                        required>
+                    </lightning-input>
+                </div>                
+
+                <div class="slds-var-p-around_medium lgc-bg">
+                    <lightning-button 
+                        variant="brand" 
+                        label="Save" 
+                        title="Primary action" 
+                        onclick={handleSave} 
+                        class="slds-var-m-left_x-small">
+                    </lightning-button>
+                </div>
+                <div class="slds-var-p-around_medium lgc-bg">
+                    <p>{apexMessage}</p>
+                </div>
+
+            </lightning-card>
+        </div>
+</template>
