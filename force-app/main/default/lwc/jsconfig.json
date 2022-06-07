@@ -1,19 +1,18 @@
 {
-    "compilerOptions": {
-        "experimentalDecorators": true
-    },
-    "include": [
-        "**/*",
-        "../../../../.sfdx/typings/lwc/**/*.d.ts"
-    ],
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "baseUrl": ".",
     "paths": {
-        "c/*": [
-            "*"
-        ]
-    },
-    "typeAcquisition": {
-        "include": [
-            "jest"
-        ]
+      "c/manageOneDegreeAPIKeys": [
+        "manageOneDegreeAPIKeys/manageOneDegreeAPIKeys.js"
+      ]
     }
+  },
+  "include": ["**/*", "../../../../.sfdx/typings/lwc/**/*.d.ts"],
+  "paths": {
+    "c/*": ["*"]
+  },
+  "typeAcquisition": {
+    "include": ["jest"]
+  }
 }
