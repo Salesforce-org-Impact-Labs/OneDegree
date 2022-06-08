@@ -138,6 +138,10 @@
     </customMetadataTypeAccesses>
     <customMetadataTypeAccesses>
         <enabled>true</enabled>
+        <name>One_Degree_API_Key__mdt</name>
+    </customMetadataTypeAccesses>
+    <customMetadataTypeAccesses>
+        <enabled>true</enabled>
         <name>One_Degree_Auth_Setting__mdt</name>
     </customMetadataTypeAccesses>
     <customMetadataTypeAccesses>
