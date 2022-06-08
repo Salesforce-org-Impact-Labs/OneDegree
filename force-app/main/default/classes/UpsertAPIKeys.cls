@@ -11,6 +11,7 @@ global class UpsertAPIKeys {
         
         One_Degree_API_Key__mdt data = new One_Degree_API_Key__mdt();
         try{
+            System.debug(' Id ' + apiKeys[0].Id);
             data.Id = apiKeys[0].Id;
             data.Google_API_Key__c = googleAPIKey;
             data.OneDegree_API_Key__c = oneDegreeAPIKey;

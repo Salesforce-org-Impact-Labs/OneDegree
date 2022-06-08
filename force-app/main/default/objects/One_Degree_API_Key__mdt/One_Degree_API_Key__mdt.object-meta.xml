@@ -4,5 +4,5 @@
 Populating the API keys are required before running any jobs.</description>
     <label>One Degree API Key</label>
     <pluralLabel>One Degree API Keys</pluralLabel>
-    <visibility>PackageProtected</visibility>
+    <visibility>Protected</visibility>
 </CustomObject>
