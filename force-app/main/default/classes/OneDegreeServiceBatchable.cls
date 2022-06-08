@@ -12,10 +12,11 @@ global with sharing class OneDegreeServiceBatchable implements
                                                     API_Key__c ,Hostname__c
                                                     FROM One_Degree_Auth_Setting__mdt LIMIT 1];
         
-        One_Degree_API_Key__mdt odSetting2 = [SELECT MasterLabel, DeveloperName, 
-                                                    Google_API_Key__c, OneDegree_API_Key__c
-                                                    FROM One_Degree_API_Key__mdt LIMIT 1];
-        authSet.put('API_Key__c', odSetting2.OneDegree_API_Key__c);
+        String query = 'SELECT Id, MasterLabel, NamespacePrefix,DeveloperName,Google_API_Key__c, OneDegree_API_Key__c FROM One_Degree_API_Key__mdt LIMIT 1';
+        CustomMetadataDAO odAPI = new CustomMetadataDAO();
+        List<One_Degree_API_Key__mdt> apiKeys = odAPI.getCustomMetadataRecords(query);
+        
+        authSet.put('API_Key__c', apiKeys[0].OneDegree_API_Key__c);
         authSet.put('Hostname__c', odSetting.Hostname__c);        
     }
     global Database.QueryLocator start(Database.BatchableContext bc) {
