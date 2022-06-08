@@ -5,12 +5,17 @@ global with sharing class GeoCodingServiceQueueable implements Queueable, Databa
     String encryptedApiKey = '';
     
     global GeoCodingServiceQueueable() {
-        Geo_Coding_Auth_Setting__mdt geoSetting = [SELECT MasterLabel, DeveloperName, 
+        One_Degree_API_Key__mdt geoSetting = [SELECT MasterLabel, DeveloperName, 
+                                                    Google_API_Key__c, OneDegree_API_Key__c
+                                                    FROM One_Degree_API_Key__mdt LIMIT 1];
+        
+        Geo_Coding_Auth_Setting__mdt geoSetting2 = [SELECT MasterLabel, DeveloperName, 
                                                     API_Key__c ,Hostname__c
-                                                    FROM Geo_Coding_Auth_Setting__mdt LIMIT 1];
-        encryptedApiKey = OneDegreeHelper.oneDegreeEncrypt(geoSetting.API_Key__c);
+                                                    FROM Geo_Coding_Auth_Setting__mdt LIMIT 1];        
+        
+        encryptedApiKey = OneDegreeHelper.oneDegreeEncrypt(geoSetting.Google_API_Key__c);
         authSet.put('API_Key__c', encryptedApiKey);
-        authSet.put('Hostname__c', geoSetting.Hostname__c);                
+        authSet.put('Hostname__c', geoSetting2.Hostname__c);                
     }
     
     global void execute(QueueableContext context) {
