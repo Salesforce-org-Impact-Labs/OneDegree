@@ -16,6 +16,8 @@ global with sharing class OneDegreeServiceBatchable implements
         CustomMetadataDAO odAPI = new CustomMetadataDAO();
         List<One_Degree_API_Key__mdt> apiKeys = odAPI.getCustomMetadataRecords(query);
         
+        System.assert(apiKeys[0].OneDegree_API_Key__c.length() > 0, 'OneDegree API Keys ' + apiKeys[0].OneDegree_API_Key__c + ' not recognized');        
+        
         authSet.put('API_Key__c', apiKeys[0].OneDegree_API_Key__c);
         authSet.put('Hostname__c', odSetting.Hostname__c);        
     }

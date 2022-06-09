@@ -7,7 +7,9 @@ global with sharing class GeoCodingServiceQueueable implements Queueable, Databa
     global GeoCodingServiceQueueable() {
         String query = 'SELECT Id, MasterLabel, NamespacePrefix,DeveloperName,Google_API_Key__c, OneDegree_API_Key__c FROM One_Degree_API_Key__mdt LIMIT 1';
         CustomMetadataDAO odAPI = new CustomMetadataDAO();
-        List<One_Degree_API_Key__mdt> apiKeys = odAPI.getCustomMetadataRecords(query);                    
+        List<One_Degree_API_Key__mdt> apiKeys = odAPI.getCustomMetadataRecords(query);  
+        
+        System.assert(apiKeys[0].Google_API_Key__c.length() > 0, 'Google API Keys ' + apiKeys[0].Google_API_Key__c + ' not recognized');
         
         Geo_Coding_Auth_Setting__mdt geoSetting2 = [SELECT MasterLabel, DeveloperName, 
                                                     API_Key__c ,Hostname__c
