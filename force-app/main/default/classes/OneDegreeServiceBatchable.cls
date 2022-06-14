@@ -11,11 +11,8 @@ global with sharing class OneDegreeServiceBatchable implements
         One_Degree_Auth_Setting__mdt odSetting = [SELECT MasterLabel, DeveloperName, 
                                                     API_Key__c ,Hostname__c
                                                     FROM One_Degree_Auth_Setting__mdt LIMIT 1];
-        
-        String query = 'SELECT Id, MasterLabel, NamespacePrefix,DeveloperName,Google_API_Key__c, OneDegree_API_Key__c FROM One_Degree_API_Key__mdt LIMIT 1';
-        CustomMetadataDAO odAPI = new CustomMetadataDAO();
-        List<One_Degree_API_Key__mdt> apiKeys = odAPI.getCustomMetadataRecords(query);
-        
+
+		List<One_Degree_API_Key__mdt> apiKeys = One_Degree_API_Key__mdt.getAll().values();               
         System.assert(apiKeys[0].OneDegree_API_Key__c.length() > 0, 'OneDegree API Keys ' + apiKeys[0].OneDegree_API_Key__c + ' not recognized');        
         
         authSet.put('API_Key__c', apiKeys[0].OneDegree_API_Key__c);

@@ -5,19 +5,30 @@ global with sharing class GeoCodingServiceQueueable implements Queueable, Databa
     String encryptedApiKey = '';
     
     global GeoCodingServiceQueueable() {
+        /*
         String query = 'SELECT Id, MasterLabel, NamespacePrefix,DeveloperName,Google_API_Key__c, OneDegree_API_Key__c FROM One_Degree_API_Key__mdt LIMIT 1';
         CustomMetadataDAO odAPI = new CustomMetadataDAO();
         List<One_Degree_API_Key__mdt> apiKeys = odAPI.getCustomMetadataRecords(query);  
-        
-        System.assert(apiKeys[0].Google_API_Key__c.length() > 0, 'Google API Keys ' + apiKeys[0].Google_API_Key__c + ' not recognized');
-        
-        Geo_Coding_Auth_Setting__mdt geoSetting2 = [SELECT MasterLabel, DeveloperName, 
+        */
+		//
+        try{
+			List<One_Degree_API_Key__mdt> apiKeys = One_Degree_API_Key__mdt.getAll().values();
+    		System.debug(apiKeys[0].Google_API_Key__c);        
+        	System.assert(apiKeys[0].Google_API_Key__c.length() > 0, 'Google API Keys ' + apiKeys[0].Google_API_Key__c + ' not recognized');            
+        	Geo_Coding_Auth_Setting__mdt geoSetting2 = [SELECT MasterLabel, DeveloperName, 
                                                     API_Key__c ,Hostname__c
                                                     FROM Geo_Coding_Auth_Setting__mdt LIMIT 1];        
         
-        encryptedApiKey = OneDegreeHelper.oneDegreeEncrypt(apiKeys[0].Google_API_Key__c);
-        authSet.put('API_Key__c', encryptedApiKey);
-        authSet.put('Hostname__c', geoSetting2.Hostname__c);                
+        	encryptedApiKey = OneDegreeHelper.oneDegreeEncrypt(apiKeys[0].Google_API_Key__c);
+        	authSet.put('API_Key__c', encryptedApiKey);
+        	authSet.put('Hostname__c', geoSetting2.Hostname__c);                            
+        }catch(exception ex){
+            System.debug(LoggingLevel.ERROR, 'Error ---> ' + ex.getMessage() + '\n Cause ---> ' + ex.getCause());
+            System.debug(LoggingLevel.ERROR, 'Error Details---> ' + ex.getStackTraceString() + '\n Line # ---> ' + ex.getLineNumber());            
+        }        
+
+        
+
     }
     
     global void execute(QueueableContext context) {
