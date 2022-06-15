@@ -11,7 +11,15 @@ global with sharing class OneDegreeServiceBatchable implements
         One_Degree_Auth_Setting__mdt odSetting = [SELECT MasterLabel, DeveloperName, 
                                                     API_Key__c ,Hostname__c
                                                     FROM One_Degree_Auth_Setting__mdt LIMIT 1];
-        authSet.put('API_Key__c', odSetting.API_Key__c);
+
+        List<OD_API_Keys__c> apiKeys = [SELECT Service_Provider__c, API_Key__c  
+                                                  	FROM OD_API_Keys__c 
+                                                  	WHERE Service_Provider__c = 'One Degree' 
+                                                  	LIMIT 1];        
+		//List<One_Degree_API_Key__mdt> apiKeys = One_Degree_API_Key__mdt.getAll().values();               
+        System.assert(apiKeys[0].API_Key__c.length() > 0, 'OneDegree API Keys ' + apiKeys[0].API_Key__c + ' not recognized');        
+        
+        authSet.put('API_Key__c', apiKeys[0].API_Key__c);
         authSet.put('Hostname__c', odSetting.Hostname__c);        
     }
     global Database.QueryLocator start(Database.BatchableContext bc) {
