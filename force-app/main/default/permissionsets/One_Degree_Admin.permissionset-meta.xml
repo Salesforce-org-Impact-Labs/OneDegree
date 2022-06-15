@@ -128,10 +128,6 @@
         <apexClass>Test_ServiceProvider</apexClass>
         <enabled>true</enabled>
     </classAccesses>
-    <classAccesses>
-        <apexClass>UpsertAPIKeys</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
     <customMetadataTypeAccesses>
         <enabled>true</enabled>
         <name>Geo_Coding_Auth_Setting__mdt</name>
