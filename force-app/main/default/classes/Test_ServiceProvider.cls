@@ -85,6 +85,19 @@ public class Test_ServiceProvider {
         testOpenHours.add(openHours2);
 
         insert testOpenHours;
+        
+        //create the api keys
+        List<OD_API_Keys__c> apikeys = new List<OD_API_Keys__c>();
+        OD_API_Keys__c googleApikeys = new OD_API_Keys__c();
+        googleApikeys.API_Key__c = 'google_1234abcd';
+        googleApikeys.Service_Provider__c = 'Google';
+            
+        OD_API_Keys__c oneDegreeApikeys = new OD_API_Keys__c();
+        oneDegreeApikeys.API_Key__c = 'onedegree_1234abcd';
+        oneDegreeApikeys.Service_Provider__c = 'One Degree';            
+        apikeys.add(googleApikeys);
+        apikeys.add(oneDegreeApikeys);
+        insert apikeys;
     }    
     
     @IsTest
