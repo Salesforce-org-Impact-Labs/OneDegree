@@ -8,7 +8,8 @@
 ## Testing
 [![OneDegree Setup Video]](https://drive.google.com/file/d/1iCykc20FrrTjNRaOKnbIR5RMge4TlBSK/view?usp=sharing)
 ### Step 1
-  Populate respective api keys in custom metadata<br/> "Geo Coding Auth Setting" and "One Degree Auth Setting"
+  1. Populate 2 records in OD API Keys object, one for Google API key and another for One Degree API Key
+  2. Verify respective URL endpoints in custom metadata<br/> "Geo Coding Auth Setting" and "One Degree Auth Setting"
 ### Step 2
   Create zipcodes and relevant search records for each zipcode in OD Zipcodes object.
   NOTE: In the related list of Zipcode, there is "Start Date" and "End Date", they are automatically populated by batch job. If you run another batch in less than 24 hours for the same zipcode for the items, it will skip the zipcodes, either you have to clear the Dates or add new items for the batch to pick up.
