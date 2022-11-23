@@ -1,1 +1,23 @@
-{"packageDirectories": [{"path": "force-app", "default": true}], "namespace": "svc_onedegree", "sourceApiVersion": "48.0"}
+{
+   "packageDirectories": [
+       {
+           "path": "force-app",
+           "default": true,
+           "package": "svc_onedegree",
+           "versionName": "ver 0.1",
+           "versionNumber": "0.1.0.NEXT",
+           "dependencies": [
+               {
+                   "package": "refrec@1.16"
+               }
+ 
+           ]
+       }
+   ],
+   "namespace": "svc_onedegree",
+   "sourceApiVersion": "48.0",
+   "packageAliases": {
+       "svc_onedegree": "0Ho3h000000CaqtCAC",
+       "refrec@1.16": "04t3h000004pNdkAAE"
+   }
+}
