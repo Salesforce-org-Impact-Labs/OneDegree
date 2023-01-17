@@ -1,6 +1,6 @@
 # OneDegree
 
-![Deploy, Run Apex Tests, Delete Org](https://github.com/Salesforce-org-Impact-xLabs/OneDegree/workflows/Deploy,%20Run%20Apex%20Tests,%20Delete%20Org/badge.svg)
+![Deploy, Run Apex Tests, Delete Org](https://github.com/Salesforce-org-Impact-Labs/OneDegree/workflows/Deploy,%20Run%20Apex%20Tests,%20Delete%20Org/badge.svg)
 
 #### This open source repo represents a way nonprofits leveraging Service Match can integrate a service provider to easily import life-changing social services that can then be referred to individuals in need. The code in this repo is a proof of concept and is intended to demonstrate a way to complete this and spark innovation for similar integrations with other service providers. Please read this readme in its entirety before installing it in your Sandbox.
 ##
