@@ -1,5 +1,7 @@
 # OneDegree
-
+#### This open source repo represents a way nonprofits leveraging Service Match can integrate a service provider to easily import life-changing social services that can then be referred to individuals in need. The code in this repo is a proof of concept and is intended to demonstrate a way to complete this and spark innovation for similar integrations with other service providers. Please read this readme in its entirety before installing it in your Sandbox.
+Service Match is an open-source app designed for case managers who connect people experiencing homelessness to vital human services. With a single click, case managers can generate a personalized list of services based on client data that they’re already collecting. The proof of concept represented in this code reflects one way an organization could integrate the One Degree API with Service Match to import available services and configure them to be leveraged by Service Match.
+Service Match was an output of Salesforce.org Impact Labs. If you have questions or would like additional information or resources, please contact Stephanie Zeitz at szeitz@salesforce.com.
 ![Deploy, Run Apex Tests, Delete Org](https://github.com/Salesforce-org-Impact-Labs/OneDegree/workflows/Deploy,%20Run%20Apex%20Tests,%20Delete%20Org/badge.svg)
 
 ## Please refer to the release section to get the latest installation link.
